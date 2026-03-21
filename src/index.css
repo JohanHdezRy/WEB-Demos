@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter:      "Inter", sans-serif;
+  --font-poppins:    "Poppins", sans-serif;
+  --font-playfair:   "Playfair Display", Georgia, serif;
+  --font-cormorant:  "Cormorant Garamond", Georgia, serif;
+  --font-dm:         "DM Sans", sans-serif;
+  --font-pacifico:   "Pacifico", cursive;
+  --font-dancing:    "Dancing Script", cursive;
+}
+
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-inter, system-ui, sans-serif); overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; }
+  button { font-family: inherit; cursor: pointer; }
+  img { max-width: 100%; display: block; }
+}
