@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavbarScroll } from '../../hooks/useNavbarScroll'
 import { ScrollTop } from '../../components/ScrollTop'
 import RevealSection from '../../components/animations/RevealSection'
 import Masonry, { type MasonryItem } from '../../Effects/Masonry'
@@ -41,16 +42,9 @@ const allGallery: (MasonryItem & { cat: Category })[] = [
 
 /* ── Componente ──────────────────────────── */
 export function Restaurant() {
-  const [scrolled, setScrolled]   = useState(false)
+  const scrolled = useNavbarScroll(60)
   const [cart, setCart]           = useState(0)
   const [activeTab, setActiveTab] = useState<Category>('All')
-
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', h)
-    window.scrollTo(0, 0)
-    return () => window.removeEventListener('scroll', h)
-  }, [])
 
   const masonryItems = useMemo<MasonryItem[]>(() =>
     activeTab === 'All'

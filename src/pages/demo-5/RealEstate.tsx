@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavbarScroll } from '../../hooks/useNavbarScroll'
 import { ScrollTop } from '../../components/ScrollTop'
 import RevealSection from '../../components/animations/RevealSection'
 import CountUp from '../../Effects/CountUp'
@@ -22,16 +23,9 @@ const reasons = [
 ]
 
 export function RealEstate() {
-  const [scrolled, setScrolled] = useState(false)
+  const scrolled = useNavbarScroll(60)
   const [filter, setFilter]     = useState<'All' | 'For Sale' | 'For Rent'>('All')
   const [search, setSearch]     = useState('')
-
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', h)
-    window.scrollTo(0, 0)
-    return () => window.removeEventListener('scroll', h)
-  }, [])
 
   const filtered = properties.filter(p =>
     (filter === 'All' || p.type === filter) &&

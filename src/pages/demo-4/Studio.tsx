@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavbarScroll } from '../../hooks/useNavbarScroll'
 import { ScrollTop } from '../../components/ScrollTop'
 import Threads from '../../Effects/Threads'
 import SpotlightCard from '../../Effects/SpotlightCard'
@@ -107,14 +108,8 @@ function GridBg({ className = '' }: { className?: string }) {
 
 // ─── Nav ────────────────────────────────────────────────────────────────────
 function Nav() {
-  const [scrolled, setScrolled] = useState(false)
+  const scrolled = useNavbarScroll(40)
   const [menuOpen, setMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', fn)
-    return () => window.removeEventListener('scroll', fn)
-  }, [])
 
   return (
     <nav

@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
+import { useNavbarScroll } from '../../hooks/useNavbarScroll'
 import { motion } from 'motion/react'
 import { ScrollTop } from '../../components/ScrollTop'
 import RevealSection from '../../components/animations/RevealSection'
@@ -123,15 +124,9 @@ function NavLink({ label, href }: { label: string; href: string }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export function AdventurePark() {
-  const [scrolled, setScrolled] = useState(false)
+  const scrolled = useNavbarScroll(60)
   const [mobileOpen, setMobileOpen] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   return (
     <div style={{ background: DARK, minHeight: '100vh', fontFamily: 'var(--font-dm-sans)', overflowX: 'hidden' }}>

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavbarScroll } from '../../hooks/useNavbarScroll'
 import { ScrollTop } from '../../components/ScrollTop'
 import RevealSection from '../../components/animations/RevealSection'
 import Stack from '../../Effects/Stack'
@@ -56,15 +57,8 @@ const products = [
 
 /* ── Component ────────────────────────────────────────────── */
 export function ECommerce() {
-  const [scrolled, setScrolled] = useState(false)
+  const scrolled = useNavbarScroll(60)
   const [cart, setCart] = useState(0)
-
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', h)
-    window.scrollTo(0, 0)
-    return () => window.removeEventListener('scroll', h)
-  }, [])
 
   /* Stack cards */
   const stackCards = heroImages.map((src, i) => (

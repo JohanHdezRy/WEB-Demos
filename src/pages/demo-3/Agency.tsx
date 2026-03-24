@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavbarScroll } from '../../hooks/useNavbarScroll'
 import { ScrollTop } from '../../components/ScrollTop'
 import RevealSection from '../../components/animations/RevealSection'
 import SpotlightCard from '../../Effects/SpotlightCard'
@@ -24,15 +25,8 @@ const works = [
 ]
 
 export function Agency() {
-  const [scrolled, setScrolled] = useState(false)
+  const scrolled = useNavbarScroll(60)
   const [email, setEmail]       = useState('')
-
-  useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', h)
-    window.scrollTo(0, 0)
-    return () => window.removeEventListener('scroll', h)
-  }, [])
 
   return (
     <div className="bg-[#0D0D0D] text-white font-[var(--font-inter)] overflow-x-hidden">
