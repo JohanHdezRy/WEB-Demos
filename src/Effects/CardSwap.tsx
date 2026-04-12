@@ -3,7 +3,6 @@ import React, {
   type ReactElement, type ReactNode, type RefObject, useEffect, useMemo, useRef,
 } from 'react'
 import gsap from 'gsap'
-import './CardSwap.css'
 
 export interface CardSwapProps {
   width?: number | string

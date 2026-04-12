@@ -1,6 +1,5 @@
 import { motion, useMotionValue, useTransform, type PanInfo } from 'motion/react'
-import { useState, useEffect } from 'react'
-import './Stack.css'
+import { useStack } from '../Hooks/useStack'
 
 interface CardRotateProps {
   children: React.ReactNode
@@ -76,46 +75,14 @@ export default function Stack({
   width = 300,
   height = 380,
 }: StackProps) {
-  const [isMobile, setIsMobile] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < mobileBreakpoint)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [mobileBreakpoint])
-
-  const shouldDisableDrag = mobileClickOnly && isMobile
-  const shouldEnableClick = sendToBackOnClick || shouldDisableDrag
-
-  const [stack, setStack] = useState<{ id: number; content: React.ReactNode }[]>(() =>
-    cards.map((content, index) => ({ id: index + 1, content }))
-  )
-
-  useEffect(() => {
-    if (cards.length) setStack(cards.map((content, index) => ({ id: index + 1, content })))
-  }, [cards])
-
-  const sendToBack = (id: number) => {
-    setStack(prev => {
-      const newStack = [...prev]
-      const index = newStack.findIndex(card => card.id === id)
-      const [card] = newStack.splice(index, 1)
-      newStack.unshift(card)
-      return newStack
-    })
-  }
-
-  useEffect(() => {
-    if (autoplay && stack.length > 1 && !isPaused) {
-      const interval = setInterval(() => {
-        const topCardId = stack[stack.length - 1].id
-        sendToBack(topCardId)
-      }, autoplayDelay)
-      return () => clearInterval(interval)
-    }
-  }, [autoplay, autoplayDelay, stack, isPaused])
+  const { stack, setIsPaused, sendToBack, shouldDisableDrag, shouldEnableClick } = useStack({
+    cards,
+    autoplay,
+    autoplayDelay,
+    mobileClickOnly,
+    sendToBackOnClick,
+    mobileBreakpoint,
+  })
 
   return (
     <div

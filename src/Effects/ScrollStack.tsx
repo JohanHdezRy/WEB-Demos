@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useRef, useCallback } from 'react'
 import type { ReactNode } from 'react'
 import Lenis from 'lenis'
-import './ScrollStack.css'
 
 export interface ScrollStackItemProps {
   itemClassName?: string

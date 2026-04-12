@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import {
   motion,
   useScroll,
@@ -8,6 +8,7 @@ import {
   useVelocity,
   useAnimationFrame,
 } from 'motion/react';
+import { useElementWidth } from '../Hooks/useElementWidth';
 
 interface VelocityMapping {
   input: [number, number];
@@ -26,19 +27,6 @@ interface ScrollVelocityProps {
   scrollerClassName?: string;
   parallaxStyle?: React.CSSProperties;
   scrollerStyle?: React.CSSProperties;
-}
-
-function useElementWidth<T extends HTMLElement>(ref: React.RefObject<T | null>): number {
-  const [width, setWidth] = useState(0);
-  useLayoutEffect(() => {
-    function update() {
-      if (ref.current) setWidth(ref.current.offsetWidth);
-    }
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, [ref]);
-  return width;
 }
 
 function VelocityText({

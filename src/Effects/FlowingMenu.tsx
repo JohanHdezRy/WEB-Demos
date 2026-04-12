@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { gsap } from 'gsap'
-import './FlowingMenu.css'
 
 interface MenuItemData {
   link: string

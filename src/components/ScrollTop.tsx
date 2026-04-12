@@ -1,34 +1,23 @@
-import { useState, useEffect } from 'react'
-import type { CSSProperties } from 'react'
+import { useScrollTop } from '../Hooks/useScrollTop'
 
 interface Props { bg: string; color: string; hoverBg?: string; hoverColor?: string }
 
 export function ScrollTop({ bg, color, hoverBg, hoverColor }: Props) {
-  const [show, setShow]       = useState(false)
-  const [hovered, setHovered] = useState(false)
-
-  useEffect(() => {
-    const h = () => setShow(window.scrollY > 600)
-    window.addEventListener('scroll', h)
-    return () => window.removeEventListener('scroll', h)
-  }, [])
-
-  const style: CSSProperties = {
-    position: 'fixed', bottom: 30, right: 30, width: 46, height: 46,
-    background: hovered ? (hoverBg || color) : bg,
-    color: hovered ? (hoverColor || bg) : color,
-    border: 'none', cursor: 'pointer', fontSize: '1.2rem',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    opacity: show ? 1 : 0, transition: 'all .3s', zIndex: 999,
-    borderRadius: '50%',
-  }
+  const { visible, hovered, scrollToTop, onMouseEnter, onMouseLeave } = useScrollTop()
 
   return (
     <button
-      style={style}
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >↑</button>
+      className="fixed bottom-[30px] right-[30px] w-[46px] h-[46px] border-0 cursor-pointer text-xl flex items-center justify-center rounded-full transition-all duration-300 z-[999]"
+      style={{
+        background: hovered ? (hoverBg || color) : bg,
+        color: hovered ? (hoverColor || bg) : color,
+        opacity: visible ? 1 : 0,
+      }}
+      onClick={scrollToTop}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      ↑
+    </button>
   )
 }
