@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -106,6 +106,7 @@ export function CloudX() {
   const bottomBarRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const manifRef = useRef<HTMLElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useLenis();
 
@@ -240,10 +241,11 @@ export function CloudX() {
           zIndex: 100,
           display: "flex",
           alignItems: "center",
-          padding: "22px 48px",
+          padding: "16px 24px",
           gap: 32,
           transition: "background 0.4s, backdrop-filter 0.4s",
         }}
+        className="cx-nav"
       >
         <span
           style={{
@@ -266,22 +268,25 @@ export function CloudX() {
         >
           ← Demos
         </Link>
-        {["Platform", "Pricing", "Docs", "Status"].map((l) => (
-          <a
-            key={l}
-            href="#"
-            style={{
-              color: T.muted,
-              fontSize: "0.82rem",
-              textDecoration: "none",
-              transition: "color 0.2s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = T.text)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = T.muted)}
-          >
-            {l}
-          </a>
-        ))}
+        {/* Desktop links */}
+        <div className="cx-nav-links">
+          {["Platform", "Pricing", "Docs", "Status"].map((l) => (
+            <a
+              key={l}
+              href="#"
+              style={{
+                color: T.muted,
+                fontSize: "0.82rem",
+                textDecoration: "none",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = T.text)}
+              onMouseLeave={(e) => (e.currentTarget.style.color = T.muted)}
+            >
+              {l}
+            </a>
+          ))}
+        </div>
         <div
           style={{
             marginLeft: "auto",
@@ -292,6 +297,7 @@ export function CloudX() {
         >
           <a
             href="#"
+            className="cx-signin"
             style={{
               color: T.muted,
               fontSize: "0.82rem",
@@ -302,6 +308,7 @@ export function CloudX() {
             Sign in
           </a>
           <button
+            className="cx-cta-btn"
             style={{
               background: T.accentBg,
               color: T.accentTx,
@@ -325,8 +332,127 @@ export function CloudX() {
           >
             Get started
           </button>
+          {/* Hamburger */}
+          <button
+            className="cx-hamburger"
+            onClick={() => setMenuOpen((o) => !o)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: T.text,
+              display: "flex",
+              flexDirection: "column",
+              gap: 5,
+              padding: 4,
+            }}
+            aria-label="Toggle menu"
+          >
+            <span
+              style={{
+                display: "block",
+                width: 22,
+                height: 2,
+                background: "currentColor",
+                transition: "transform 0.3s, opacity 0.3s",
+                transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none",
+              }}
+            />
+            <span
+              style={{
+                display: "block",
+                width: 22,
+                height: 2,
+                background: "currentColor",
+                opacity: menuOpen ? 0 : 1,
+                transition: "opacity 0.3s",
+              }}
+            />
+            <span
+              style={{
+                display: "block",
+                width: 22,
+                height: 2,
+                background: "currentColor",
+                transition: "transform 0.3s",
+                transform: menuOpen
+                  ? "translateY(-7px) rotate(-45deg)"
+                  : "none",
+              }}
+            />
+          </button>
         </div>
       </nav>
+
+      {/* Mobile drawer */}
+      {menuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: T.bg,
+            zIndex: 90,
+            display: "flex",
+            flexDirection: "column",
+            padding: "100px 32px 48px",
+            gap: 32,
+          }}
+        >
+          {["Platform", "Pricing", "Docs", "Status"].map((l) => (
+            <a
+              key={l}
+              href="#"
+              onClick={() => setMenuOpen(false)}
+              style={{
+                color: T.text,
+                fontSize: "1.6rem",
+                fontWeight: 300,
+                letterSpacing: "-0.03em",
+                textDecoration: "none",
+              }}
+            >
+              {l}
+            </a>
+          ))}
+          <div
+            style={{
+              marginTop: "auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+            }}
+          >
+            <a
+              href="#"
+              style={{
+                color: T.muted,
+                fontSize: "0.9rem",
+                textDecoration: "none",
+              }}
+            >
+              Sign in
+            </a>
+            <button
+              style={{
+                background: T.accentBg,
+                color: T.accentTx,
+                border: "none",
+                padding: "14px 24px",
+                borderRadius: 9999,
+                fontSize: "0.9rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                width: "fit-content",
+              }}
+            >
+              Get started
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ══ HERO — fullscreen video ══════════════════════════════════════════ */}
       <div
@@ -563,6 +689,7 @@ export function CloudX() {
 
       {/* ══ TWO CARDS — For Developers / For Enterprise ══════════════════════ */}
       <section
+        className="cx-two-cards"
         style={{
           padding: "0",
           borderTop: `1px solid ${T.border}`,
@@ -936,10 +1063,11 @@ export function CloudX() {
       {FEATURES.map((feat, i) => (
         <section
           key={i}
+          className="cx-feature"
           style={{
             borderTop: `1px solid ${T.border}`,
             display: "grid",
-            gridTemplateColumns: i % 2 === 0 ? "1fr 1fr" : "1fr 1fr",
+            gridTemplateColumns: "1fr 1fr",
             minHeight: 560,
           }}
         >
@@ -1081,6 +1209,7 @@ export function CloudX() {
             From early-stage to global scale.
           </h2>
           <div
+            className="cx-testimonials"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(2,1fr)",
@@ -1255,6 +1384,7 @@ export function CloudX() {
 
       {/* ══ FOOTER ═══════════════════════════════════════════════════════════ */}
       <footer
+        className="cx-footer"
         style={{
           borderTop: `1px solid ${T.border}`,
           padding: "64px 48px 100px",
@@ -1448,6 +1578,7 @@ export function CloudX() {
 
       {/* copyright bar */}
       <div
+        className="cx-bottom-bar"
         style={{
           position: "fixed",
           bottom: 0,
@@ -1491,6 +1622,41 @@ export function CloudX() {
           ))}
         </div>
       </div>
+
+      <style>{`
+        /* ── CloudX Responsive ─────────────────────────────── */
+        .cx-nav { padding: 16px 24px !important; }
+        .cx-nav-links { display: flex; gap: 32px; }
+        .cx-hamburger { display: none !important; }
+
+        @media (max-width: 768px) {
+          .cx-nav { padding: 14px 20px !important; gap: 12px !important; }
+          .cx-nav-links { display: none !important; }
+          .cx-signin { display: none !important; }
+          .cx-cta-btn { display: none !important; }
+          .cx-hamburger { display: flex !important; }
+
+          .cx-two-cards { grid-template-columns: 1fr !important; }
+          .cx-two-cards > div { border-right: none !important; border-top: 1px solid rgba(255,255,255,0.08); min-height: 320px !important; }
+
+          .cx-feature { grid-template-columns: 1fr !important; min-height: auto !important; }
+          .cx-feature > div[style*="order"] { order: unset !important; border: none !important; }
+          .cx-feature > div:last-child { padding: 40px 24px !important; }
+          .cx-feature > div:first-child { min-height: 260px; }
+
+          .cx-testimonials { grid-template-columns: 1fr !important; }
+
+          .cx-footer { grid-template-columns: 1fr 1fr !important; padding: 48px 24px 80px !important; gap: 32px !important; }
+          .cx-footer > div:first-child { grid-column: 1 / -1; }
+
+          .cx-bottom-bar { padding: 10px 20px !important; }
+          .cx-bottom-bar > div { display: none !important; }
+        }
+
+        @media (max-width: 480px) {
+          .cx-footer { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 }
