@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -104,6 +104,8 @@ export function Lupa() {
   const specRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useFonts(FONTS_HREF);
   useLenis({ lerp: 0.08 });
@@ -353,7 +355,7 @@ export function Lupa() {
             margin: "0 auto",
           }}
         >
-          <div style={{ display: "flex", gap: "2.8rem", alignItems: "center" }}>
+          <div className="lp-nav-links" style={{ display: "flex", gap: "2.8rem", alignItems: "center" }}>
             {NAV_LINKS.map((link, i) => (
               <a
                 key={link}
@@ -374,7 +376,7 @@ export function Lupa() {
             style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}
           >
             <button
-              className="nav-menu-btn he-body"
+              className="nav-menu-btn he-body lp-nav-cta"
               style={{
                 padding: "0.55rem 1.4rem",
                 borderRadius: 9999,
@@ -387,26 +389,42 @@ export function Lupa() {
             >
               Menu
             </button>
+            {/* hamburger */}
             <button
-              className="nav-menu-btn"
+              className="lp-hamburger"
+              onClick={() => setMenuOpen((v) => !v)}
               style={{
+                display: "none",
+                flexDirection: "column",
+                gap: 5,
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                borderRadius: 9999,
                 width: 40,
                 height: 40,
-                borderRadius: 9999,
-                color: T.onBg,
-                fontSize: "1rem",
                 cursor: "pointer",
-                display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                letterSpacing: 2,
               }}
+              aria-label="Menu"
             >
-              •••
+              <span style={{ display: "block", width: 18, height: 1.5, background: "#fff", transition: "transform 0.3s", transform: menuOpen ? "translateY(6.5px) rotate(45deg)" : "none" }} />
+              <span style={{ display: "block", width: 18, height: 1.5, background: "#fff", opacity: menuOpen ? 0 : 1, transition: "opacity 0.2s" }} />
+              <span style={{ display: "block", width: 18, height: 1.5, background: "#fff", transition: "transform 0.3s", transform: menuOpen ? "translateY(-6.5px) rotate(-45deg)" : "none" }} />
             </button>
           </div>
         </div>
       </nav>
+
+      {/* mobile drawer */}
+      {menuOpen && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 199, background: "rgba(13,13,13,0.97)", backdropFilter: "blur(12px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 36 }}>
+          <button onClick={() => setMenuOpen(false)} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", color: "#fff", fontSize: "1.4rem", cursor: "pointer" }}>✕</button>
+          {NAV_LINKS.map((link) => (
+            <a key={link} href="#" onClick={() => setMenuOpen(false)} className="he-headline" style={{ color: "#fff", fontSize: "2rem", fontWeight: 700, letterSpacing: "0.04em", textDecoration: "none" }}>{link}</a>
+          ))}
+        </div>
+      )}
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section
@@ -428,6 +446,7 @@ export function Lupa() {
         />
 
         <div
+          className="lp-hero-grid"
           style={{
             position: "relative",
             zIndex: 2,
@@ -706,6 +725,7 @@ export function Lupa() {
         />
 
         <div
+          className="lp-specs-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
@@ -964,6 +984,7 @@ export function Lupa() {
 
         {/* Full-width grid — 4 equal columns */}
         <div
+          className="lp-gallery-grid"
           style={{
             width: "100vw",
             position: "relative",
@@ -1128,6 +1149,19 @@ export function Lupa() {
           </div>
         </div>
       </section>
+      <style>{`
+        @media (max-width: 768px) {
+          .lp-nav-links { display: none !important; }
+          .lp-nav-cta { display: none !important; }
+          .lp-hamburger { display: flex !important; }
+          .lp-hero-grid { grid-template-columns: 1fr !important; padding: 6rem 1.5rem 3rem !important; }
+          .lp-specs-grid { grid-template-columns: 1fr !important; min-height: unset !important; }
+          .lp-gallery-grid { grid-template-columns: repeat(2, 1fr) !important; height: auto !important; min-height: unset !important; }
+        }
+        @media (max-width: 480px) {
+          .lp-gallery-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 }

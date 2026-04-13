@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -336,6 +336,7 @@ export function Rinacita() {
   const storyRef = useRef<HTMLElement>(null);
   const storyVidRef = useRef<HTMLVideoElement>(null);
   const galleryRef = useRef<HTMLElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useLenis();
 
@@ -510,7 +511,7 @@ export function Rinacita() {
         >
           Rinacita
         </span>
-        <div style={{ display: "flex", gap: 28, alignItems: "center" }}>
+        <div className="ri-nav-links" style={{ display: "flex", gap: 28, alignItems: "center" }}>
           {["Menú", "Historia", "Reservas"].map((l) => (
             <a
               key={l}
@@ -547,7 +548,64 @@ export function Rinacita() {
             Reservar
           </button>
         </div>
+        {/* hamburger */}
+        <button
+          className="ri-hamburger"
+          onClick={() => setMenuOpen((v) => !v)}
+          style={{
+            display: "none",
+            flexDirection: "column",
+            gap: 5,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 4,
+          }}
+          aria-label="Menú"
+        >
+          <span style={{ display: "block", width: 22, height: 1.5, background: C.dark, transition: "transform 0.3s", transform: menuOpen ? "translateY(6.5px) rotate(45deg)" : "none" }} />
+          <span style={{ display: "block", width: 22, height: 1.5, background: C.dark, opacity: menuOpen ? 0 : 1, transition: "opacity 0.2s" }} />
+          <span style={{ display: "block", width: 22, height: 1.5, background: C.dark, transition: "transform 0.3s", transform: menuOpen ? "translateY(-6.5px) rotate(-45deg)" : "none" }} />
+        </button>
       </nav>
+
+      {/* mobile drawer */}
+      {menuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99,
+            background: C.bg,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 32,
+          }}
+        >
+          <button
+            onClick={() => setMenuOpen(false)}
+            style={{ position: "absolute", top: 24, right: 24, background: "none", border: "none", fontSize: "1.4rem", cursor: "pointer", color: C.dark }}
+            aria-label="Cerrar"
+          >✕</button>
+          {["Menú", "Historia", "Reservas"].map((l) => (
+            <a
+              key={l}
+              href="#"
+              onClick={() => setMenuOpen(false)}
+              style={{ color: C.dark, fontSize: "1.5rem", fontWeight: 300, letterSpacing: "-0.02em", textDecoration: "none" }}
+            >
+              {l}
+            </a>
+          ))}
+          <button
+            style={{ background: C.dark, color: C.bg, border: "none", padding: "12px 36px", borderRadius: 9999, fontSize: "0.9rem", fontWeight: 500, cursor: "pointer", marginTop: 8 }}
+          >
+            Reservar
+          </button>
+        </div>
+      )}
 
       {/* ══ HERO ═════════════════════════════════════════════════════════════ */}
       <div
@@ -724,6 +782,7 @@ export function Rinacita() {
         }}
       >
         <div
+          className="ri-intro-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 2fr",
@@ -839,6 +898,7 @@ export function Rinacita() {
 
         {/* 2×2 grid */}
         <div
+          className="ri-menu-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
@@ -858,6 +918,7 @@ export function Rinacita() {
       {/* ══ STORY ════════════════════════════════════════════════════════════ */}
       <section
         ref={storyRef}
+        className="ri-story-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
@@ -985,6 +1046,7 @@ export function Rinacita() {
 
       {/* ══ STATS ════════════════════════════════════════════════════════════ */}
       <section
+        className="ri-stats-grid"
         style={{
           borderTop: `1px solid ${C.border}`,
           display: "grid",
@@ -1241,6 +1303,7 @@ export function Rinacita() {
 
       {/* ══ FOOTER ═══════════════════════════════════════════════════════════ */}
       <footer
+        className="ri-footer-grid"
         style={{
           borderTop: `1px solid ${C.border}`,
           display: "grid",
@@ -1396,6 +1459,20 @@ export function Rinacita() {
           ))}
         </div>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .ri-nav-links { display: none !important; }
+          .ri-hamburger { display: flex !important; }
+          .ri-intro-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .ri-menu-grid { grid-template-columns: 1fr !important; }
+          .ri-story-grid { grid-template-columns: 1fr !important; }
+          .ri-stats-grid { grid-template-columns: 1fr !important; }
+          .ri-footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; padding: 40px 24px !important; }
+        }
+        @media (max-width: 480px) {
+          .ri-footer-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 }

@@ -574,6 +574,7 @@ function OverviewSection() {
     >
       {/* Metrics */}
       <div
+        className="db-metrics-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4,1fr)",
@@ -586,7 +587,7 @@ function OverviewSection() {
       </div>
 
       {/* Charts row */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+      <div className="db-charts-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         {/* Sales donut */}
         <div
           className="chart-card"
@@ -1057,6 +1058,7 @@ function ECommerceSection() {
     >
       {/* Metrics */}
       <div
+        className="db-metrics-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4,1fr)",
@@ -1070,7 +1072,7 @@ function ECommerceSection() {
 
       {/* Charts */}
       <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 16 }}
+        className="db-charts-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: 16 }}
       >
         {/* Monthly revenue bar */}
         <div
@@ -1514,6 +1516,7 @@ function AnalyticsSection() {
       style={{ display: "flex", flexDirection: "column", gap: 20 }}
     >
       <div
+        className="db-metrics-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4,1fr)",
@@ -1526,7 +1529,7 @@ function AnalyticsSection() {
       </div>
 
       <div
-        style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 16 }}
+        className="db-charts-grid" style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 16 }}
       >
         {/* Traffic over time */}
         <div
@@ -1905,6 +1908,7 @@ function CustomersSection() {
       style={{ display: "flex", flexDirection: "column", gap: 20 }}
     >
       <div
+        className="db-metrics-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4,1fr)",
@@ -1918,7 +1922,7 @@ function CustomersSection() {
 
       {/* Funnel + Lifetime value */}
       <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 16 }}
+        className="db-charts-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 16 }}
       >
         <div
           className="chart-card"
@@ -2750,6 +2754,7 @@ export function Dashboard() {
   const [activeSettings, setActiveSettings] = useState<SettingsSection | null>(
     null,
   );
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
   const sectionLabels: Record<Section, string> = {
@@ -2828,6 +2833,7 @@ export function Dashboard() {
       {/* ── Sidebar ── */}
       <aside
         ref={sidebarRef}
+        className={`db-sidebar${sidebarOpen ? " db-sidebar-open" : ""}`}
         style={{
           width: 220,
           background: S.surface,
@@ -3056,6 +3062,16 @@ export function Dashboard() {
             gap: 10,
           }}
         >
+          <button
+            className="db-hamburger"
+            onClick={() => setSidebarOpen((v) => !v)}
+            style={{ display: "none", flexDirection: "column", gap: 4, background: "none", border: "none", cursor: "pointer", padding: 4, marginRight: 4 }}
+            aria-label="Toggle sidebar"
+          >
+            <span style={{ display: "block", width: 18, height: 1.5, background: S.muted }} />
+            <span style={{ display: "block", width: 18, height: 1.5, background: S.muted }} />
+            <span style={{ display: "block", width: 18, height: 1.5, background: S.muted }} />
+          </button>
           <div style={{ color: S.muted, fontSize: "0.76rem" }}>
             <span>Dashboards</span>
             <span style={{ margin: "0 6px", opacity: 0.4 }}>/</span>
@@ -3134,6 +3150,7 @@ export function Dashboard() {
 
       {/* ── Right Panel ── */}
       <aside
+        className="db-right-panel"
         style={{
           width: 268,
           background: S.surface,
@@ -3149,6 +3166,21 @@ export function Dashboard() {
           <ContactsPanel />
         </div>
       </aside>
+      <style>{`
+        @media (max-width: 1024px) {
+          .db-right-panel { display: none !important; }
+        }
+        @media (max-width: 768px) {
+          .db-sidebar { position: fixed !important; top: 0 !important; left: 0 !important; height: 100% !important; z-index: 200 !important; transform: translateX(-100%) !important; transition: transform 0.3s ease !important; }
+          .db-sidebar.db-sidebar-open { transform: translateX(0) !important; }
+          .db-hamburger { display: flex !important; }
+          .db-metrics-grid { grid-template-columns: repeat(2,1fr) !important; }
+          .db-charts-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          .db-metrics-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 }
