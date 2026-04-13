@@ -91,11 +91,14 @@ void main() {
 // ── Geometry helpers ──────────────────────────────────────────────────────────
 
 class Face {
-  constructor(
-    public a: number,
-    public b: number,
-    public c: number,
-  ) {}
+  public a: number;
+  public b: number;
+  public c: number;
+  constructor(a: number, b: number, c: number) {
+    this.a = a;
+    this.b = b;
+    this.c = c;
+  }
 }
 
 class Vertex {
@@ -442,11 +445,12 @@ class ArcballControl {
   private _combinedQuat = quat.create();
   private readonly EPSILON = 0.1;
   private readonly ID_QUAT = quat.create();
+  private canvas: HTMLCanvasElement;
+  private cb: (dt: number) => void;
 
-  constructor(
-    private canvas: HTMLCanvasElement,
-    private cb: (dt: number) => void,
-  ) {
+  constructor(canvas: HTMLCanvasElement, cb: (dt: number) => void) {
+    this.canvas = canvas;
+    this.cb = cb;
     canvas.addEventListener("pointerdown", (e) => {
       vec2.set(this.pointerPos, e.clientX, e.clientY);
       vec2.copy(this.previousPointerPos, this.pointerPos);
@@ -636,15 +640,23 @@ class InfiniteGridMenu {
   };
   public smoothRotationVelocity = 0;
   public scaleFactor = 1.0;
+  private canvas: HTMLCanvasElement;
+  private items: MenuItem[];
+  private onActiveItem: (i: number) => void;
+  private onMovement: (moving: boolean) => void;
 
   constructor(
-    private canvas: HTMLCanvasElement,
-    private items: MenuItem[],
-    private onActiveItem: (i: number) => void,
-    private onMovement: (moving: boolean) => void,
+    canvas: HTMLCanvasElement,
+    items: MenuItem[],
+    onActiveItem: (i: number) => void,
+    onMovement: (moving: boolean) => void,
     onInit?: (inst: InfiniteGridMenu) => void,
     scale = 1.0,
   ) {
+    this.canvas = canvas;
+    this.items = items;
+    this.onActiveItem = onActiveItem;
+    this.onMovement = onMovement;
     this.scaleFactor = scale;
     this.camera.position[2] = 3 * scale;
     this.init(onInit);
