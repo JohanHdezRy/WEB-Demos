@@ -5,9 +5,10 @@ export function useMedia(queries: string[], values: number[], defaultValue: numb
   const [value, setValue] = useState<number>(get)
 
   useEffect(() => {
+    const mqls = queries.map(q => matchMedia(q))
     const handler = () => setValue(get)
-    queries.forEach(q => matchMedia(q).addEventListener('change', handler))
-    return () => queries.forEach(q => matchMedia(q).removeEventListener('change', handler))
+    mqls.forEach(mql => mql.addEventListener('change', handler))
+    return () => mqls.forEach(mql => mql.removeEventListener('change', handler))
   }, [queries])
 
   return value

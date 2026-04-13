@@ -1,499 +1,1204 @@
-import React, { useEffect, useLayoutEffect, useRef, useCallback } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
-//import { Beams } from './Beams'
-import PrismaticBurst from "./PrismaticBurst";
-import { FuzzyText } from "./FuzzyText";
+import { Link } from "react-router-dom";
+import FloatingLines from "../../Effects/FloatingLines";
+import { FuzzyText } from "../../Effects/FuzzyText";
+import Folder from "../../components/Folder";
+import { useFonts } from "../../Hooks/useFonts";
+import { useVinylRoulette } from "../../Hooks/useVinylRoulette";
 
 import vinil0 from "../../Resources/img/vinil_0.png";
 import vinil1 from "../../Resources/img/vinil_1.webp";
 import vinil2 from "../../Resources/img/vinil_2.png";
 import vinil3 from "../../Resources/img/vinil_3.png";
 import vinil4 from "../../Resources/img/vinil_4.png";
+import vinil5 from "../../Resources/img/vinil_5.webp";
+import vinil6 from "../../Resources/img/vinil_6.webp";
+import vinil7 from "../../Resources/img/vinil_7.webp";
+import vinil8 from "../../Resources/img/vinil_8.webp";
+import vinil9 from "../../Resources/img/vinil_9.webp";
+import vinil10 from "../../Resources/img/vinil_10.webp";
 
-gsap.registerPlugin(ScrollTrigger);
-
-// ── Fonts ─────────────────────────────────────────────────────────────────────
+// ── Fonts ──────────────────────────────────────────────────────────────────────
 const FONTS_HREF =
-  "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;700&display=swap";
+  "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap";
 
-// ── Color tokens ──────────────────────────────────────────────────────────────
+// ── Color tokens ───────────────────────────────────────────────────────────────
 const C = {
-  bg: "#060608",
-  surface: "rgba(14,13,18,0.75)",
-  accent: "#9B5DE5",
-  gold: "#F5A623",
-  white: "#F0EEF5",
-  dim: "#6B6880",
-  border: "rgba(155,93,229,0.22)",
+  bg: "#131313",
+  bgLow: "#1c1b1b",
+  bgHigh: "#2a2a2a",
+  text: "#e5e2e1",
+  textMuted: "#bac9cc",
+  primary: "#c3f5ff",
+  accent: "#00e5ff",
+  secondary: "#ffabf3",
+  outline: "#3b494c",
+  onPrimary: "#00363d",
 };
 
-// ── Vinyl catalog ─────────────────────────────────────────────────────────────
-const VINYLS = [
+// ── Vinyl Roulette data ────────────────────────────────────────────────────────
+const ROULETTE = [
   {
-    image: vinil0,
-    text: "Evangelion Finally",
+    img: vinil0,
+    title: "EVANGELION FINALLY",
     artist: "Various Artists",
-    price: "$38",
+    genre: "Anime OST / 180G",
+    label: "Special Press",
   },
-  { image: vinil1, text: "Plastic Beach", artist: "Gorillaz", price: "$32" },
-  { image: vinil2, text: "Purple EP", artist: "Unknown Signal", price: "$28" },
   {
-    image: vinil3,
-    text: "Hit Me Hard & Soft",
+    img: vinil3,
+    title: "HIT ME HARD & SOFT",
     artist: "Billie Eilish",
+    genre: "Pop / Color Vinyl",
+    label: "Featured Selection",
+  },
+  {
+    img: vinil4,
+    title: "DISCOVERY",
+    artist: "Daft Punk",
+    genre: "Electronic / 2LP",
+    label: "Rare Pressing",
+  },
+  {
+    img: vinil1,
+    title: "PLASTIC BEACH",
+    artist: "Gorillaz",
+    genre: "Alternative / 2LP",
+    label: "Now Spinning",
+  },
+  {
+    img: vinil8,
+    title: "ANALOG BLOOM",
+    artist: "Aphex Twin",
+    genre: "IDM / Limited Ed",
+    label: "Collector's Pick",
+  },
+  {
+    img: vinil6,
+    title: "NEON CORRIDORS",
+    artist: "Boards of Canada",
+    genre: "IDM / Double LP",
+    label: "Staff Favourite",
+  },
+  {
+    img: vinil2,
+    title: "PURPLE EP",
+    artist: "Unknown Signal",
+    genre: "Electronic / Ltd Ed",
+    label: "Underground Cut",
+  },
+];
+
+// ── City Sessions folder data ──────────────────────────────────────────────────
+const FOLDERS = [
+  {
+    title: "SYNTHIA VOLT",
+    subtitle: "Midnight Modulations",
+    genre: "Electronic / 180G",
     price: "$34",
+    imgs: [vinil0, vinil3, vinil8],
   },
-  { image: vinil4, text: "Discovery", artist: "Daft Punk", price: "$45" },
+  {
+    title: "RAILWAY NOISE",
+    subtitle: "Underpass Echoes",
+    genre: "Techno / Ltd Ed",
+    price: "$42",
+    imgs: [vinil1, vinil4, vinil9],
+  },
+  {
+    title: "OBLIVION CORE",
+    subtitle: "Frozen Frequency",
+    genre: "Ambient / Double LP",
+    price: "$29",
+    imgs: [vinil2, vinil5, vinil10],
+  },
+  {
+    title: "NEON PULSE",
+    subtitle: "Vector Subsets",
+    genre: "Synthwave / Color",
+    price: "$38",
+    imgs: [vinil3, vinil6, vinil0],
+  },
+  {
+    title: "METROPOLIS",
+    subtitle: "Echo Chamber",
+    genre: "Industrial / Dark",
+    price: "$45",
+    imgs: [vinil4, vinil7, vinil1],
+  },
+  {
+    title: "VOID RATIO",
+    subtitle: "The Glitch",
+    genre: "Glitch / Experimental",
+    price: "$31",
+    imgs: [vinil5, vinil8, vinil2],
+  },
 ];
 
-// ── Ad cards for ScrollStack ──────────────────────────────────────────────────
-const ADS = [
-  {
-    border: "#9B5DE5",
-    tag: "JUST LANDED",
-    title: "BRAND NEW",
-    sub: "Fresh pressings — just arrived this week.",
-  },
-  {
-    border: "#E5375D",
-    tag: "EDITOR'S PICK",
-    title: "BEST VINYLS",
-    sub: "Handpicked collection from our curators.",
-  },
-  {
-    border: "#3DD9C5",
-    tag: "WORLDWIDE",
-    title: "FREE SHIPPING",
-    sub: "On every order. No minimum, no excuses.",
-  },
-  {
-    border: "#F5A623",
-    tag: "MEMBERS ONLY",
-    title: "JOIN THE CLUB",
-    sub: "First access to limited pressings.",
-  },
-];
-
-// ── Gallery rows ──────────────────────────────────────────────────────────────
-const GALLERY_ROWS = [
-  [...VINYLS, ...VINYLS], // row 0 — scroll right→left
-  [...VINYLS, ...VINYLS].reverse(), // row 1 — scroll left→right
-  [...VINYLS, ...VINYLS], // row 2 — scroll right→left
-];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ScrollStack
-// ─────────────────────────────────────────────────────────────────────────────
-const ScrollStackItem = ({ children }: { children: React.ReactNode }) => (
-  <div className="ss-card">{children}</div>
-);
-
-function ScrollStack({
-  children,
-  itemDistance = 30,
-  itemScale = 0.04,
-  itemStackDistance = 20,
-  stackPosition = "18%",
-  scaleEndPosition = "8%",
-  baseScale = 0.84,
-}: {
-  children: React.ReactNode;
-  itemDistance?: number;
-  itemScale?: number;
-  itemStackDistance?: number;
-  stackPosition?: string;
-  scaleEndPosition?: string;
-  baseScale?: number;
-}) {
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLElement[]>([]);
-  const lastTRef = useRef(new Map<number, Record<string, number>>());
-  const lenisRef = useRef<Lenis | null>(null);
-  const rafRef = useRef<number | null>(null);
-
-  const parsePct = useCallback(
-    (v: string | number, h: number) =>
-      typeof v === "string" && v.includes("%")
-        ? (parseFloat(v) / 100) * h
-        : parseFloat(v as string),
-    [],
-  );
-
-  const updateCards = useCallback(() => {
-    const scrollTop = window.scrollY;
-    const ch = window.innerHeight;
-    const stackPx = parsePct(stackPosition, ch);
-    const scaleEndPx = parsePct(scaleEndPosition, ch);
-    const endEl = document.querySelector(".ss-end") as HTMLElement;
-    const endTop = endEl
-      ? endEl.getBoundingClientRect().top + window.scrollY
-      : 0;
-
-    cardsRef.current.forEach((card, i) => {
-      if (!card) return;
-      const cardTop = card.getBoundingClientRect().top + window.scrollY;
-      const triggerStart = cardTop - stackPx - itemStackDistance * i;
-      const triggerEnd = cardTop - scaleEndPx;
-      const pinStart = triggerStart;
-      const pinEnd = endTop - ch / 2;
-
-      const sp =
-        scrollTop < triggerStart
-          ? 0
-          : scrollTop > triggerEnd
-            ? 1
-            : (scrollTop - triggerStart) / (triggerEnd - triggerStart);
-      const scale = 1 - sp * (1 - (baseScale + i * itemScale));
-
-      let ty = 0;
-      if (scrollTop >= pinStart && scrollTop <= pinEnd)
-        ty = scrollTop - cardTop + stackPx + itemStackDistance * i;
-      else if (scrollTop > pinEnd)
-        ty = pinEnd - cardTop + stackPx + itemStackDistance * i;
-
-      const nT = {
-        ty: Math.round(ty * 100) / 100,
-        sc: Math.round(scale * 1000) / 1000,
-      };
-      const lT = lastTRef.current.get(i);
-      if (
-        !lT ||
-        Math.abs((lT.ty ?? 0) - nT.ty) > 0.1 ||
-        Math.abs((lT.sc ?? 1) - nT.sc) > 0.001
-      ) {
-        card.style.transform = `translate3d(0,${nT.ty}px,0) scale(${nT.sc})`;
-        lastTRef.current.set(i, nT);
-      }
-    });
-  }, [
-    parsePct,
-    stackPosition,
-    scaleEndPosition,
-    itemStackDistance,
-    itemScale,
-    baseScale,
-  ]);
-
-  useLayoutEffect(() => {
-    const cards = Array.from(
-      document.querySelectorAll(".ss-card"),
-    ) as HTMLElement[];
-    cardsRef.current = cards;
-    cards.forEach((card, i) => {
-      if (i < cards.length - 1) card.style.marginBottom = `${itemDistance}px`;
-      card.style.willChange = "transform";
-      card.style.transformOrigin = "top center";
-    });
-    const lenis = new Lenis({ lerp: 0.1 });
-    lenis.on("scroll", updateCards);
-    const raf = (t: number) => {
-      lenis.raf(t);
-      rafRef.current = requestAnimationFrame(raf);
-    };
-    rafRef.current = requestAnimationFrame(raf);
-    lenisRef.current = lenis;
-    updateCards();
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      lenis.destroy();
-      cardsRef.current = [];
-      lastTRef.current.clear();
-    };
-  }, [itemDistance, updateCards]);
-
+// ── NavBar ─────────────────────────────────────────────────────────────────────
+function NavBar() {
   return (
-    <div ref={scrollerRef} style={{ position: "relative" }}>
-      <div>
-        {children}
-        <div className="ss-end" />
-      </div>
-    </div>
+    <header
+      style={{
+        position: "fixed",
+        top: 0,
+        width: "100%",
+        zIndex: 50,
+        background: `${C.bg}cc`,
+        backdropFilter: "blur(20px)",
+        boxShadow: `0 0 32px rgba(195,245,255,0.06)`,
+        borderBottom: `1px solid ${C.outline}22`,
+      }}
+    >
+      <nav
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "1rem 2rem",
+          maxWidth: 1280,
+          margin: "0 auto",
+        }}
+      >
+        <Link
+          to="/"
+          style={{
+            fontSize: "1.3rem",
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700,
+            letterSpacing: "-0.05em",
+            color: C.text,
+            textDecoration: "none",
+          }}
+        >
+          NIGHTCITY RECORDS
+        </Link>
+
+        <div style={{ display: "flex", gap: "3rem", alignItems: "center" }}>
+          {["Catalog", "The Roulette", "Artists", "City Sessions"].map(
+            (item) => (
+              <a
+                key={item}
+                href="#"
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: "0.7rem",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.2em",
+                  color: item === "The Roulette" ? C.accent : `${C.text}bb`,
+                  borderBottom:
+                    item === "The Roulette" ? `2px solid ${C.accent}` : "none",
+                  paddingBottom: item === "The Roulette" ? "2px" : 0,
+                  textDecoration: "none",
+                  transition: "color 0.2s",
+                }}
+              >
+                {item}
+              </a>
+            ),
+          )}
+        </div>
+
+        <button
+          style={{
+            background: "none",
+            border: "none",
+            color: C.primary,
+            cursor: "pointer",
+            fontSize: "1.25rem",
+          }}
+        >
+          🛍
+        </button>
+      </nav>
+    </header>
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// GSAP Horizontal Scrolling Gallery
-// ─────────────────────────────────────────────────────────────────────────────
-function HorizontalGallery() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      rowRefs.current.forEach((wrapper, i) => {
-        if (!wrapper || !wrapper.parentElement) return;
-        const section = wrapper.parentElement;
-
-        // Odd rows go right→left (start at 0, end negative)
-        // Even rows go left→right (start negative, end at 0)
-        const scrollWidth = wrapper.scrollWidth - section.offsetWidth;
-        const [xStart, xEnd] =
-          i % 2 === 0 ? [0, -scrollWidth] : [-scrollWidth, 0];
-
-        gsap.fromTo(
-          wrapper,
-          { x: xStart },
-          {
-            x: xEnd,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 0.8,
-            },
-          },
-        );
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+// ── VinylRoulette ──────────────────────────────────────────────────────────────
+function VinylRoulette() {
+  const { active, leftIdx, rightIdx, prev, next } = useVinylRoulette(
+    ROULETTE.length,
+  );
+  const item = ROULETTE[active];
 
   return (
-    <div ref={sectionRef} className="hg-section">
-      {GALLERY_ROWS.map((row, ri) => (
-        <div key={ri} className="hg-row">
+    <section
+      style={{ padding: "8rem 0", background: C.bgLow, overflow: "hidden" }}
+    >
+      {/* Heading */}
+      <div
+        style={{ textAlign: "center", marginBottom: "5rem", padding: "0 2rem" }}
+      >
+        <h2
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: "clamp(2rem, 5vw, 3.5rem)",
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: "-0.04em",
+            color: C.text,
+            margin: 0,
+          }}
+        >
+          Vinyl Roulette
+        </h2>
+        <p
+          style={{
+            fontFamily: "'Newsreader', serif",
+            fontStyle: "italic",
+            fontSize: "1.2rem",
+            color: C.textMuted,
+            marginTop: "0.75rem",
+          }}
+        >
+          A curated rotation of essential spins.
+        </p>
+      </div>
+
+      {/* Carousel */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "3rem",
+          padding: "0 2rem",
+        }}
+      >
+        {/* Left ghost */}
+        <div
+          style={{
+            width: 260,
+            flexShrink: 0,
+            opacity: 0.18,
+            transform: "scale(0.88)",
+            filter: "grayscale(1)",
+            transition: "all 0.5s",
+          }}
+          className="hidden md:block"
+        >
+          <img
+            src={ROULETTE[leftIdx].img}
+            alt=""
+            style={{ width: "100%", aspectRatio: "1/1", objectFit: "cover" }}
+          />
+        </div>
+
+        {/* Active card */}
+        <div
+          style={{
+            position: "relative",
+            width: "min(480px, 80vw)",
+            flexShrink: 0,
+            transition: "all 0.7s",
+          }}
+        >
           <div
-            ref={(el) => {
-              rowRefs.current[ri] = el;
+            style={{
+              aspectRatio: "1/1",
+              position: "relative",
+              overflow: "hidden",
+              boxShadow: `0 20px 60px rgba(0,218,243,0.18)`,
             }}
-            className="hg-wrapper"
           >
-            {row.map((v, ci) => (
-              <div key={ci} className="hg-card">
-                <div className="hg-img-wrap">
-                  <img src={v.image} alt={v.text} className="hg-img" />
+            <img
+              src={item.img}
+              alt={item.title}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+
+            {/* Hover overlay — CSS driven */}
+            <div className="nc-roulette-overlay">
+              <span className="nc-roulette-label">{item.label}</span>
+              <h3 className="nc-roulette-title">{item.title}</h3>
+              <p className="nc-roulette-artist">{item.artist}</p>
+              <button className="nc-roulette-cta">View Details</button>
+            </div>
+
+            {/* Spinning badge */}
+            <div className="nc-spinning-badge">
+              <span className="nc-badge-text">
+                NOW SPINNING · ROULETTE · RARE PRESSING ·
+              </span>
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div
+            style={{
+              marginTop: "2rem",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "0 1rem",
+            }}
+          >
+            <button className="nc-arrow-btn" onClick={prev}>
+              ←
+            </button>
+
+            <div style={{ display: "flex", gap: "0.75rem" }}>
+              {ROULETTE.map((_, i) => (
+                <span
+                  key={i}
+                  className={i === active ? "nc-dot nc-dot-active" : "nc-dot"}
+                />
+              ))}
+            </div>
+
+            <button className="nc-arrow-btn" onClick={next}>
+              →
+            </button>
+          </div>
+        </div>
+
+        {/* Right ghost */}
+        <div
+          style={{
+            width: 260,
+            flexShrink: 0,
+            opacity: 0.18,
+            transform: "scale(0.88)",
+            filter: "grayscale(1)",
+            transition: "all 0.5s",
+          }}
+          className="hidden md:block"
+        >
+          <img
+            src={ROULETTE[rightIdx].img}
+            alt=""
+            style={{ width: "100%", aspectRatio: "1/1", objectFit: "cover" }}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Manifesto ──────────────────────────────────────────────────────────────────
+function Manifesto() {
+  return (
+    <section
+      style={{ padding: "8rem 4vw", background: C.bg, overflow: "hidden" }}
+    >
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gap: "6rem",
+          alignItems: "center",
+        }}
+      >
+        {/* Video */}
+        <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "absolute",
+              top: -48,
+              left: -48,
+              width: 256,
+              height: 256,
+              background: `${C.primary}0d`,
+              filter: "blur(100px)",
+              pointerEvents: "none",
+            }}
+          />
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            src="https://cdn.pixabay.com/video/2025/03/18/265815_large.mp4"
+            style={{
+              width: "100%",
+              aspectRatio: "4/5",
+              objectFit: "cover",
+              filter: "grayscale(1)",
+              border: `1px solid ${C.outline}22`,
+              display: "block",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: -32,
+              right: -32,
+              background: C.bgHigh,
+              padding: "2rem",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+              borderLeft: `2px solid ${C.primary}`,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "0.6rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.4em",
+                color: C.secondary,
+              }}
+            >
+              Est. 2024
+            </span>
+          </div>
+        </div>
+
+        {/* Text */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "0.75rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.5em",
+              color: C.primary,
+            }}
+          >
+            Manifesto
+          </span>
+          <h2
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "clamp(2.5rem, 5vw, 4rem)",
+              fontWeight: 700,
+              lineHeight: 1.05,
+              color: C.text,
+              margin: 0,
+            }}
+          >
+            The Nightcity
+            <br />
+            Philosophy
+          </h2>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+          >
+            <p
+              style={{
+                fontFamily: "'Newsreader', serif",
+                fontSize: "1.15rem",
+                lineHeight: 1.75,
+                color: C.textMuted,
+                margin: 0,
+              }}
+            >
+              We don't just sell vinyl; we archive culture. Born from the
+              concrete echoes and neon hum of the metropolis, Nightcity Records
+              is a sanctuary for the nocturnally inclined.
+            </p>
+            <p
+              style={{
+                fontFamily: "'Newsreader', serif",
+                fontSize: "1.15rem",
+                lineHeight: 1.75,
+                color: C.textMuted,
+                margin: 0,
+              }}
+            >
+              Our curation focuses on the deep cuts, electronic gems, and
+              nighttime vibes that define urban life after the sun sets.
+            </p>
+          </div>
+
+          <div
+            style={{
+              paddingTop: "2rem",
+              display: "flex",
+              gap: "3rem",
+              alignItems: "center",
+            }}
+          >
+            {[
+              { val: "2.5k+", label: "Curated Titles" },
+              { val: "12", label: "City Chapters" },
+            ].map((s) => (
+              <div key={s.label} style={{ textAlign: "center" }}>
+                <div
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontSize: "2rem",
+                    fontWeight: 700,
+                    color: C.primary,
+                  }}
+                >
+                  {s.val}
                 </div>
-                <div className="hg-info">
-                  <span className="hg-artist">{v.artist}</span>
-                  <span className="hg-title">{v.text}</span>
-                  <span className="hg-price">{v.price}</span>
+                <div
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontSize: "0.55rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.25em",
+                    color: C.textMuted,
+                    marginTop: 4,
+                  }}
+                >
+                  {s.label}
                 </div>
               </div>
             ))}
           </div>
         </div>
-      ))}
+      </div>
+    </section>
+  );
+}
+
+// ── City Sessions (3×2 Folder grid) ───────────────────────────────────────────
+const FOLDER_SCALE = 2.6;
+const FOLDER_CELL_H = Math.round(80 * FOLDER_SCALE) + 80; // visual folder height + paper overflow
+
+function FolderCell({ folder }: { folder: (typeof FOLDERS)[number] }) {
+  const items = folder.imgs.map((src, i) => (
+    <img
+      key={i}
+      src={src}
+      alt=""
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        borderRadius: 10,
+      }}
+    />
+  ));
+
+  return (
+    <div className="nc-folder-cell">
+      {/* Folder display area */}
+      <div
+        style={{
+          width: "100%",
+          height: FOLDER_CELL_H,
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "center",
+          overflow: "visible",
+          paddingBottom: "0.5rem",
+        }}
+      >
+        <div
+          style={{
+            transformOrigin: "bottom center",
+            transform: `scale(${FOLDER_SCALE})`,
+          }}
+        >
+          <Folder size={1} color={C.accent} items={items} />
+        </div>
+      </div>
+
+      {/* Info */}
+      <div style={{ width: "100%", textAlign: "center", padding: "0 0.5rem" }}>
+        <h3
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: "1.1rem",
+            fontWeight: 700,
+            color: C.text,
+            margin: "0 0 0.25rem",
+          }}
+        >
+          {folder.title}
+        </h3>
+        <p
+          style={{
+            fontFamily: "'Newsreader', serif",
+            fontStyle: "italic",
+            fontSize: "1rem",
+            color: C.textMuted,
+            margin: "0 0 0.75rem",
+          }}
+        >
+          {folder.subtitle}
+        </p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderTop: `1px solid ${C.outline}33`,
+            paddingTop: "0.75rem",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "0.58rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.2em",
+              color: `${C.textMuted}88`,
+            }}
+          >
+            {folder.genre}
+          </span>
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "1.1rem",
+              fontWeight: 700,
+              color: C.primary,
+            }}
+          >
+            {folder.price}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Main page
-// ─────────────────────────────────────────────────────────────────────────────
-export function NightCity() {
-  useEffect(() => {
-    if (!document.querySelector(`link[href="${FONTS_HREF}"]`)) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = FONTS_HREF;
-      document.head.appendChild(link);
-    }
-  }, []);
+function CitySessions() {
+  return (
+    <section style={{ padding: "8rem 4vw", background: C.bgLow }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+        {/* Header */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            marginBottom: "5rem",
+            flexWrap: "wrap",
+            gap: "1.5rem",
+          }}
+        >
+          <div>
+            <span
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "0.7rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.4em",
+                color: C.secondary,
+              }}
+            >
+              Catalog Update
+            </span>
+            <h2
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "clamp(3rem, 6vw, 5rem)",
+                fontWeight: 700,
+                color: C.text,
+                margin: "0.5rem 0 0",
+                lineHeight: 1,
+              }}
+            >
+              City Sessions
+            </h2>
+          </div>
+          <button className="nc-outline-btn">View All</button>
+        </div>
+
+        {/* 3×2 Folder Grid */}
+        <div
+          className="nc-folder-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "2rem",
+          }}
+        >
+          {FOLDERS.map((folder) => (
+            <FolderCell key={folder.title} folder={folder} />
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div style={{ marginTop: "5rem", textAlign: "center" }}>
+          <button className="nc-primary-btn">Explore Full Catalog</button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Footer ─────────────────────────────────────────────────────────────────────
+function Footer() {
+  const cols = [
+    {
+      heading: "Discover",
+      links: [
+        "New Arrivals",
+        "Best Sellers",
+        "Artist Exclusives",
+        "Vinyl Roulette",
+      ],
+    },
+    {
+      heading: "Connect",
+      links: ["Instagram", "Soundcloud", "Newsletter", "Discord"],
+    },
+    {
+      heading: "In-Store",
+      links: ["Mon – Sat: 12PM – 10PM", "Sun: 2PM – 8PM", "Locate Studio"],
+    },
+  ];
 
   return (
-    <div style={{ color: C.white, overflowX: "hidden", position: "relative" }}>
+    <footer
+      style={{
+        background: "#0e0e0e",
+        paddingTop: "4rem",
+        paddingBottom: "8rem",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "0 3rem",
+          display: "grid",
+          gridTemplateColumns: "2fr 1fr 1fr 1fr",
+          gap: "3rem",
+        }}
+      >
+        <div>
+          <Link
+            to="/"
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "1.1rem",
+              fontWeight: 700,
+              color: C.text,
+              textDecoration: "none",
+              letterSpacing: "-0.04em",
+              textTransform: "uppercase",
+              display: "block",
+              marginBottom: "1rem",
+            }}
+          >
+            NIGHTCITY RECORDS
+          </Link>
+          <p
+            style={{
+              fontFamily: "'Newsreader', serif",
+              fontStyle: "italic",
+              fontSize: "0.9rem",
+              color: `${C.textMuted}88`,
+              maxWidth: 240,
+              lineHeight: 1.7,
+              margin: 0,
+            }}
+          >
+            Curators of the sonic underworld. We bridge the gap between human
+            emotion and synthesized precision.
+          </p>
+        </div>
+
+        {cols.map((col) => (
+          <div key={col.heading}>
+            <h4
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "0.6rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.3em",
+                color: C.primary,
+                marginBottom: "1.25rem",
+              }}
+            >
+              {col.heading}
+            </h4>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+              }}
+            >
+              {col.links.map((l) => (
+                <li key={l}>
+                  <a href="#" className="nc-footer-link">
+                    {l}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "5rem auto 0",
+          padding: "2rem 3rem 0",
+          borderTop: `1px solid ${C.outline}22`,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "1rem",
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: "0.58rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.2em",
+            color: `${C.text}44`,
+            margin: 0,
+          }}
+        >
+          © 2024 NIGHTCITY RECORDS. ENGINEERED FOR THE NIGHT.
+        </p>
+        <div style={{ display: "flex", gap: "2rem" }}>
+          {["Privacy Policy", "Terms of Service"].map((t) => (
+            <span key={t} className="nc-footer-policy">
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ── Now Playing Bar ────────────────────────────────────────────────────────────
+function NowPlayingBar() {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 40,
+        background: `${C.bg}bb`,
+        backdropFilter: "blur(24px)",
+        borderTop: `1px solid ${C.outline}22`,
+        padding: "0.75rem 2rem",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      {/* Track info */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          width: "33%",
+        }}
+      >
+        <div
+          style={{ width: 48, height: 48, overflow: "hidden", flexShrink: 0 }}
+        >
+          <img
+            src={vinil3}
+            alt=""
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              filter: "grayscale(1)",
+            }}
+          />
+        </div>
+        <div>
+          <div
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              color: C.primary,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: 220,
+            }}
+          >
+            NEON PULSE — VECTOR SUBSETS
+          </div>
+          <div
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "0.52rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.2em",
+              color: C.textMuted,
+            }}
+          >
+            Now Playing in Gallery
+          </div>
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.5rem",
+          width: "33%",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+          {(["⇄", "⏮", null, "⏭", "↻"] as (string | null)[]).map((icon, i) =>
+            icon === null ? (
+              <button key={i} className="nc-play-btn">
+                ▶
+              </button>
+            ) : (
+              <button key={i} className="nc-ctrl-btn">
+                {icon}
+              </button>
+            ),
+          )}
+        </div>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: 400,
+            height: 2,
+            background: `${C.outline}44`,
+            position: "relative",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              height: "100%",
+              width: "33%",
+              background: C.secondary,
+              boxShadow: `0 0 8px rgba(255,171,243,0.8)`,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Extra */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          gap: "1.5rem",
+          width: "33%",
+        }}
+      >
+        {["🔊", "🎵", "⛶"].map((icon) => (
+          <button key={icon} className="nc-ctrl-btn">
+            {icon}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Main ───────────────────────────────────────────────────────────────────────
+export function NightCity() {
+  useFonts(FONTS_HREF);
+
+  return (
+    <div
+      style={{
+        background: C.bg,
+        color: C.text,
+        overflowX: "hidden",
+        minHeight: "100vh",
+      }}
+    >
       <style>{`
-        * { box-sizing: border-box; }
-        body { margin: 0; background: ${C.bg}; }
+        /* ── Keyframes ── */
+        @keyframes nc-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        @keyframes nc-pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
 
-        /* ── Fixed Beams background ── */
-        .nc-beams-bg { position: fixed; inset: 0; z-index: 0; background: ${C.bg}; }
-        .nc-beams-overlay { position: fixed; inset: 0; z-index: 1; background: rgba(6,6,8,0.72); }
+        /* ── Fixed layers ── */
+        .nc-bg { position:fixed; inset:0; z-index:0; background:${C.bg}; }
+        .nc-overlay { position:fixed; inset:0; z-index:1; background:rgba(19,19,19,.55); pointer-events:none; }
+        .nc-content { position:relative; z-index:2; }
 
-        /* All page content sits above the bg */
-        .nc-content { position: relative; z-index: 2; }
-
-        /* Hero */
+        /* ── Hero ── */
         .nc-hero {
-          height: 100vh; display: flex; flex-direction: column;
-          align-items: center; justify-content: center;
+          position:relative; height:100vh;
+          display:flex; flex-direction:column; align-items:center; justify-content:center;
+          padding-top:5rem;
         }
-        .nc-hero-fuzzy { display: flex; flex-direction: column; align-items: center; gap: 0; }
         .nc-hero-sub {
-          font-family: 'Space Mono', monospace; font-size: 0.62rem;
-          letter-spacing: 0.38em; color: ${C.accent}; margin-top: 1.5rem;
-          text-transform: uppercase;
+          font-family:'Space Grotesk',sans-serif; font-size:.62rem;
+          letter-spacing:.38em; color:${C.accent}; margin-top:1.5rem; text-transform:uppercase;
         }
-        .nc-scroll-hint { margin-top: 3.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-        .nc-scroll-hint span { font-family: 'Space Mono', monospace; font-size: 0.48rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.25); }
-        .nc-scroll-line { width: 1px; height: 56px; background: linear-gradient(to bottom, rgba(155,93,229,0.8), transparent); animation: spulse 2s ease-in-out infinite; }
-        @keyframes spulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
-
-        /* ScrollStack section */
-        .ss-section { padding: 8rem 0; }
-        .ss-inner { max-width: min(1360px, 95vw); margin: 0 auto; padding: 0 2rem; }
-        .ss-head { text-align: center; margin-bottom: 4rem; }
-        .ss-head h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; font-style: italic; margin: 0 0 0.75rem; }
-        .ss-head p { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.3em; color: ${C.accent}; margin: 0; }
-
-        /* Ad cards — full width within container */
-        .ss-card { width: 100%; }
-        .ss-card-inner {
-          width: 100%; border-radius: 20px; overflow: hidden;
-          padding: clamp(3rem, 5vw, 5rem) clamp(3rem, 6vw, 7rem);
-          position: relative;
-          background: rgba(10,9,14,0.88);
-          backdrop-filter: blur(24px);
-          border: 1px solid rgba(255,255,255,0.07);
-          min-height: 52vh;
-          display: flex; flex-direction: column; justify-content: flex-end;
+        .nc-scroll-hint { margin-top:3rem; display:flex; flex-direction:column; align-items:center; gap:.5rem; }
+        .nc-scroll-hint span { font-family:'Space Grotesk',monospace; font-size:.48rem; letter-spacing:.3em; color:rgba(255,255,255,.25); }
+        .nc-scroll-line { width:1px; height:56px; background:linear-gradient(to bottom,rgba(0,229,255,.8),transparent); animation:nc-pulse 2s ease-in-out infinite; }
+        .nc-hero-cta {
+          margin-top:2.5rem;
+          background:linear-gradient(135deg,${C.primary},${C.accent});
+          color:${C.onPrimary}; font-family:'Space Grotesk',sans-serif; font-size:.7rem; font-weight:700;
+          text-transform:uppercase; letter-spacing:.2em; border:none;
+          padding:1.25rem 2.5rem; cursor:pointer;
+          transition:box-shadow .3s,transform .2s;
+          box-shadow:0 0 32px rgba(0,218,243,.2);
         }
-        .ss-card-tag { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.3em; font-weight: 700; margin-bottom: 1.25rem; display: block; }
-        .ss-card-title { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 7vw, 7rem); font-weight: 900; line-height: 0.88; margin-bottom: 1.5rem; letter-spacing: -0.03em; }
-        .ss-card-sub { font-family: 'Inter', sans-serif; font-size: 1.05rem; color: rgba(255,255,255,0.45); max-width: 520px; line-height: 1.6; margin-bottom: 2.5rem; }
-        .ss-card-cta { display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; font-weight: 700; padding: 0.9rem 2.2rem; border-radius: 9999px; cursor: pointer; border: none; transition: transform 0.2s; }
-        .ss-card-cta:hover { transform: scale(1.04); }
-        .ss-card-num { position: absolute; top: 0; right: 5%; font-family: 'Playfair Display', serif; font-size: clamp(8rem, 18vw, 18rem); font-weight: 900; font-style: italic; color: rgba(255,255,255,0.025); line-height: 1; pointer-events: none; user-select: none; }
+        .nc-hero-cta:hover { box-shadow:0 0 48px rgba(0,218,243,.45); transform:translateY(-2px); }
 
-        /* Horizontal Gallery */
-        .hg-section { padding: 6rem 0 8rem; overflow: hidden; }
-        .hg-section-head { max-width: min(1360px, 95vw); margin: 0 auto; padding: 0 2rem 3.5rem; }
-        .hg-section-head h3 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; font-style: italic; margin: 0 0 0.5rem; }
-        .hg-section-head p { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.3em; color: ${C.accent}; margin: 0; }
-        .nc-badge { display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 0.25em; padding: 0.3rem 0.9rem; border-radius: 9999px; border: 1px solid ${C.accent}; color: ${C.accent}; margin-bottom: 1.2rem; }
-
-        .hg-row { overflow: hidden; margin-bottom: 1.25rem; }
-        .hg-wrapper { display: flex; gap: 1rem; width: max-content; padding: 0.5rem 0; }
-
-        .hg-card {
-          width: clamp(200px, 20vw, 280px); flex-shrink: 0;
-          background: rgba(14,13,18,0.85);
-          border: 1px solid ${C.border};
-          border-radius: 12px; overflow: hidden;
-          transition: box-shadow 0.3s;
+        /* ── Roulette ── */
+        .nc-roulette-overlay {
+          position:absolute; inset:0;
+          background:rgba(0,0,0,.75); backdrop-filter:blur(2px);
+          display:flex; flex-direction:column; justify-content:flex-end;
+          padding:2.5rem; opacity:0; transition:opacity .5s;
         }
-        .hg-card:hover { box-shadow: 0 12px 40px rgba(155,93,229,0.25); }
+        .nc-roulette-overlay:hover { opacity:1 !important; }
+        .nc-roulette-label { font-family:'Space Grotesk',sans-serif; font-size:.58rem; letter-spacing:.3em; text-transform:uppercase; color:${C.primary}; margin-bottom:.5rem; }
+        .nc-roulette-title { font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; color:${C.text}; margin:0; line-height:1.1; }
+        .nc-roulette-artist { font-family:'Newsreader',serif; font-style:italic; font-size:1.2rem; color:${C.textMuted}; margin:.3rem 0 1.5rem; }
+        .nc-roulette-cta {
+          width:fit-content; font-family:'Space Grotesk',sans-serif; font-size:.62rem;
+          text-transform:uppercase; letter-spacing:.2em; color:${C.primary};
+          background:none; border:none; border-bottom:1px solid ${C.primary}; padding-bottom:2px; cursor:pointer;
+        }
+        .nc-spinning-badge {
+          position:absolute; top:2rem; right:2rem; width:88px; height:88px;
+          border-radius:50%; background:${C.primary};
+          display:flex; align-items:center; justify-content:center; padding:.75rem;
+          animation:nc-spin 12s linear infinite;
+          box-shadow:0 0 20px rgba(0,218,243,.3);
+        }
+        .nc-badge-text { font-family:'Space Grotesk',sans-serif; font-size:.5rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:${C.onPrimary}; text-align:center; line-height:1.3; }
+        .nc-arrow-btn {
+          background:none; border:none; color:${C.textMuted}; font-size:1.5rem;
+          cursor:pointer; transition:color .2s; line-height:1;
+        }
+        .nc-arrow-btn:hover { color:${C.primary}; }
+        .nc-dot {
+          display:inline-block; width:10px; height:10px; border-radius:50%;
+          background:${C.outline}88; transition:all .3s; cursor:pointer;
+        }
+        .nc-dot-active { background:${C.primary}; box-shadow:0 0 8px rgba(0,218,243,.8); }
 
-        .hg-img-wrap { aspect-ratio: 1; overflow: hidden; background: #0d0c12; }
-        .hg-img { width: 100%; height: 100%; object-fit: contain; display: block; transition: transform 0.5s ease; }
-        .hg-card:hover .hg-img { transform: scale(1.06); }
+        /* ── Folder cell ── */
+        .nc-folder-cell {
+          display:flex; flex-direction:column; align-items:center; gap:1.25rem;
+          padding:1.5rem; background:${C.bgHigh};
+          border:1px solid transparent; transition:border-color .5s; cursor:pointer;
+          overflow:visible;
+        }
+        .nc-folder-cell:hover { border-color:${C.accent}33; }
 
-        .hg-info { padding: 0.9rem 1.1rem 1.1rem; display: flex; flex-direction: column; gap: 0.25rem; }
-        .hg-artist { font-family: 'Space Mono', monospace; font-size: 0.5rem; letter-spacing: 0.2em; color: ${C.accent}; text-transform: uppercase; }
-        .hg-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: ${C.white}; }
-        .hg-price { font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700; color: ${C.gold}; margin-top: 0.35rem; }
+        /* ── Buttons ── */
+        .nc-outline-btn {
+          padding:.75rem 2rem; border:1px solid ${C.outline}55; background:none;
+          color:${C.text}; font-family:'Space Grotesk',sans-serif; font-size:.6rem;
+          text-transform:uppercase; letter-spacing:.2em; font-weight:700;
+          cursor:pointer; transition:border-color .3s;
+        }
+        .nc-outline-btn:hover { border-color:${C.primary}; }
+        .nc-primary-btn {
+          padding:1.25rem 3rem; border:1px solid ${C.primary}; background:none; color:${C.primary};
+          font-family:'Space Grotesk',sans-serif; font-size:.75rem; text-transform:uppercase;
+          letter-spacing:.2em; font-weight:700; cursor:pointer; transition:background .5s,color .5s;
+        }
+        .nc-primary-btn:hover { background:${C.primary}; color:${C.onPrimary}; }
 
-        /* Divider */
-        .nc-rule { width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(155,93,229,0.3), transparent); margin: 4rem 0; }
+        /* ── Footer ── */
+        .nc-footer-link {
+          font-family:'Space Grotesk',sans-serif; font-size:.8rem;
+          color:${C.text}88; text-decoration:none; display:block; transition:color .2s;
+        }
+        .nc-footer-link:hover { color:${C.accent}; }
+        .nc-footer-policy {
+          font-family:'Space Grotesk',sans-serif; font-size:.58rem;
+          text-transform:uppercase; letter-spacing:.2em; color:${C.text}44;
+          cursor:pointer; transition:color .2s;
+        }
+        .nc-footer-policy:hover { color:${C.primary}; }
+
+        /* ── Now Playing ── */
+        .nc-play-btn {
+          width:40px; height:40px; border-radius:50%; background:${C.primary};
+          border:none; color:${C.onPrimary}; font-size:1.1rem; cursor:pointer;
+          display:flex; align-items:center; justify-content:center; transition:transform .2s;
+        }
+        .nc-play-btn:hover { transform:scale(1.1); }
+        .nc-ctrl-btn {
+          background:none; border:none; color:${C.textMuted}; font-size:1rem;
+          cursor:pointer; transition:color .2s;
+        }
+        .nc-ctrl-btn:hover { color:${C.primary}; }
+
+        /* ── Responsive ── */
+        @media (max-width:900px) { .nc-folder-grid { grid-template-columns:repeat(2,1fr) !important; } }
+        @media (max-width:580px) { .nc-folder-grid { grid-template-columns:1fr !important; } }
       `}</style>
 
-      {/* ── Fixed Beams background ────────────────────────────────────────── */}
-      <div style={{ width: "100%", height: "600px", position: "relative" }}>
-        <PrismaticBurst
-          animationType="hover"
-          intensity={2}
-          speed={0.5}
-          distort={0}
-          paused={false}
-          offset={{ x: 0, y: 0 }}
-          hoverDampness={0.25}
-          rayCount={0}
-          mixBlendMode="lighten"
-          colors={["#ff007a", "#4d3dff", "#ffffff"]}
-          // color="#62a0ea"
-          // color1="#62a0ea"
-          // color2="#62a0ea"
+      <NavBar />
+
+      {/* Animated background */}
+      <div className="nc-bg">
+        <FloatingLines
+          enabledWaves={["top", "middle", "bottom"]}
+          lineCount={5}
+          lineDistance={5}
+          bendRadius={5}
+          bendStrength={-0.5}
+          interactive
+          parallax
         />
       </div>
-      {/* Dark overlay for readability */}
-      <div className="nc-beams-overlay" />
+      <div className="nc-overlay" />
 
-      {/* ── All page content ──────────────────────────────────────────────── */}
       <div className="nc-content">
         {/* Hero */}
         <section className="nc-hero">
-          <div className="nc-hero-fuzzy">
-            <FuzzyText
-              fontSize="clamp(3.5rem,9vw,9rem)"
-              fontWeight={900}
-              fontFamily="'Playfair Display', serif"
-              color="#F0EEF5"
-              baseIntensity={0.15}
-              hoverIntensity={0.55}
-              fuzzRange={28}
-            >
-              NightCity
-            </FuzzyText>
-            <FuzzyText
-              fontSize="clamp(3.5rem,9vw,9rem)"
-              fontWeight={900}
-              fontFamily="'Playfair Display', serif"
-              color="#9B5DE5"
-              baseIntensity={0.2}
-              hoverIntensity={0.65}
-              fuzzRange={32}
-            >
-              Records
-            </FuzzyText>
-          </div>
+          <FuzzyText
+            fontSize="clamp(3rem,9vw,8.5rem)"
+            fontWeight={900}
+            fontFamily="'Space Grotesk', sans-serif"
+            color={C.text}
+            baseIntensity={0.12}
+            hoverIntensity={0.5}
+            fuzzRange={26}
+          >
+            NightCity
+          </FuzzyText>
+          <FuzzyText
+            fontSize="clamp(3rem,9vw,8.5rem)"
+            fontWeight={900}
+            fontFamily="'Space Grotesk', sans-serif"
+            color={C.accent}
+            baseIntensity={0.18}
+            hoverIntensity={0.6}
+            fuzzRange={30}
+          >
+            Records
+          </FuzzyText>
+
           <p className="nc-hero-sub">
             // Rare Vinyl · Underground Pressings · Est. 2019
           </p>
+          <button className="nc-hero-cta">Enter the Archive</button>
+
           <div className="nc-scroll-hint">
             <span>SCROLL</span>
             <div className="nc-scroll-line" />
           </div>
         </section>
 
-        {/* ScrollStack — ads */}
-        <div className="ss-section">
-          <div className="ss-inner">
-            <div className="ss-head">
-              <h2>What's Spinning</h2>
-              <p>// NIGHTCITY RECORDS · WEEKLY BROADCAST</p>
-            </div>
-            <ScrollStack
-              itemDistance={30}
-              itemStackDistance={20}
-              stackPosition="18%"
-              baseScale={0.84}
-            >
-              {ADS.map((ad, i) => (
-                <ScrollStackItem key={i}>
-                  <div className="ss-card-inner">
-                    <div
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        background: `radial-gradient(ellipse at 80% 20%, ${ad.border}15 0%, transparent 60%)`,
-                        pointerEvents: "none",
-                      }}
-                    />
-                    <span className="ss-card-num">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="ss-card-tag" style={{ color: ad.border }}>
-                      {ad.tag}
-                    </span>
-                    <div className="ss-card-title">{ad.title}</div>
-                    <p className="ss-card-sub">{ad.sub}</p>
-                    <button
-                      className="ss-card-cta"
-                      style={{ background: ad.border, color: "#000" }}
-                    >
-                      SHOP NOW →
-                    </button>
-                  </div>
-                </ScrollStackItem>
-              ))}
-            </ScrollStack>
-          </div>
-        </div>
-
-        <div className="nc-rule" />
-
-        {/* GSAP Horizontal Gallery */}
-        <div className="hg-section-head">
-          <span className="nc-badge">CATALOG</span>
-          <h3 className="hg-section-head">Vinyl Collection</h3>
-          <p>// SCROLL TO BROWSE · {VINYLS.length} TITLES</p>
-        </div>
-        <HorizontalGallery />
+        <VinylRoulette />
+        <Manifesto />
+        <CitySessions />
+        <Footer />
       </div>
+
+      <NowPlayingBar />
     </div>
   );
 }

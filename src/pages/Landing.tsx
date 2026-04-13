@@ -1,70 +1,73 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useInView } from "../Hooks/useInView";
-
-// vite base path
-const BASE = import.meta.env.BASE_URL;
+import cover1 from "../Resources/img/demo1.png";
+import cover2 from "../Resources/img/demo2.png";
+import cover3 from "../Resources/img/demo3.png";
+import cover4 from "../Resources/img/demo4.png";
+import cover5 from "../Resources/img/demo5.png";
+import cover6 from "../Resources/img/demo6.png";
 
 const demos = [
   {
     path: "/demo-1",
-    name: "NEONIX",
-    category: "Tech Agency",
-    desc: "Full crimson-red tech agency landing page with futuristic hero, GSAP letter animations, and mission cards.",
-    colors: ["#5C0A14", "#8B1A28", "#FFFFFF"],
-    accent: "#C0303F",
+    name: "CloudX",
+    category: "SaaS Platform",
+    desc: "Dark minimal SaaS landing with GSAP stagger animations, feature grid, count-up metrics, and glass-morphism cards.",
+    colors: ["#09090b", "#f5f5f0", "rgba(255,255,255,0.15)"],
+    accent: "#e5e5e0",
     demo: "01",
-    screenshot: `${BASE}screenshots/demo-1.png`,
+    screenshot: cover1,
   },
   {
     path: "/demo-2",
-    name: "Piyee",
-    category: "Fintech App",
-    desc: "Clean white fintech landing with glassmorphism card, teal accents, SVG oval animation, and count-up stats.",
-    colors: ["#FFFFFF", "#0D9488", "#0D1117"],
-    accent: "#0D9488",
+    name: "Rinacita",
+    category: "Restaurant",
+    desc: "Warm cream restaurant page with editorial layout, gold serif typography, scroll-triggered menu cards, and video hero.",
+    colors: ["#f7f4ef", "#1c1a16", "#b89a6a"],
+    accent: "#b89a6a",
     demo: "02",
-    screenshot: `${BASE}screenshots/demo-2.png`,
+    screenshot: cover2,
   },
   {
     path: "/demo-3",
-    name: "Pepsi",
-    category: "Product Page",
-    desc: "Dark royal blue product showcase with Pepsi can, nutrition facts table, and size selector bar.",
-    colors: ["#1134B5", "#0A2090", "#C8102E"],
-    accent: "#4A6FFF",
+    name: "Red-Wolf",
+    category: "Energy Drink Brand",
+    desc: "Bold dark brand page with berry-pink accents, bento grid layout, ingredient specs, and GSAP clip-path reveals.",
+    colors: ["#0d0d0d", "#f72585", "#b5179e"],
+    accent: "#f72585",
     demo: "03",
-    screenshot: `${BASE}screenshots/demo-3.png`,
+    screenshot: cover3,
   },
   {
     path: "/demo-4",
-    name: "Beats",
-    category: "Headphones",
-    desc: "Luxury white/gold headphones page with Balmain branding, color swatches, and GSAP entrance animations.",
-    colors: ["#FAFAF8", "#C4A265", "#1A1A1A"],
-    accent: "#C4A265",
+    name: "NightCity",
+    category: "Music · Vinyl",
+    desc: "Purple-noir music store with FuzzyText hero, infinite scrolling menu, card-swap showcase, and floating particle effects.",
+    colors: ["#060608", "#9B5DE5", "#F0EEF5"],
+    accent: "#9B5DE5",
     demo: "04",
-    screenshot: `${BASE}screenshots/demo-4.png`,
+    screenshot: cover4,
   },
   {
     path: "/demo-5",
-    name: "NFC Culture",
-    category: "NFT Fashion",
-    desc: "Split black/pink NFT fashion brand page with rotating text ring, clip-path reveal, and AI prompts card.",
-    colors: ["#000000", "#C2185B", "#FFFFFF"],
-    accent: "#E91E8C",
+    name: "Maison",
+    category: "Fashion Brand",
+    desc: "Haute couture fashion page with video hero, 3×3 product grid, horizontal scroll lookbook, masonry gallery, and BounceCards press section.",
+    colors: ["#f5f3ef", "#1c1917", "#a8a29e"],
+    accent: "#a8a29e",
     demo: "05",
-    screenshot: `${BASE}screenshots/demo-5.png`,
+    screenshot: cover5,
   },
   {
     path: "/demo-6",
-    name: "BROWN",
-    category: "Cosmetics",
-    desc: "Clean light gray cosmetics brand with floating bottle, butterfly SVGs, cream blob, and product cards.",
-    colors: ["#F0EEEB", "#FFFFFF", "#1A1A1A"],
-    accent: "#8B7355",
+    name: "DWIS·M",
+    category: "Analytics Dashboard",
+    desc: "Full dark analytics dashboard with eCommerce, analytics, and CRM views — live charts, deletable notifications, and interactive contacts.",
+    colors: ["#0D1117", "#3FB950", "#161B22"],
+    accent: "#3FB950",
     demo: "06",
-    screenshot: `${BASE}screenshots/demo-6.png`,
+    screenshot: cover6,
   },
 ];
 
@@ -303,7 +306,7 @@ export function Landing() {
               marginBottom: 16,
             }}
           >
-            Portfolio de Demos
+            Portfolio Web-Demos
           </p>
           <h1
             style={{
@@ -338,7 +341,7 @@ export function Landing() {
             }}
           >
             {demos.length} demos de páginas web para los servicios más
-            solicitados. Construidos con React 19 + TypeScript + Tailwind CSS.
+            solicitados.
           </p>
         </div>
       </header>
@@ -376,8 +379,7 @@ export function Landing() {
           color: "#333",
         }}
       >
-        React 19 + TypeScript + Vite · Tailwind CSS v4 — {demos.length} Demos ·
-        JohanHdezRy
+        {demos.length} Demos · JohanHdezRy
       </footer>
     </div>
   );
