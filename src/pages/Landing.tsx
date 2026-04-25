@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useInView } from "../Hooks/useInView";
-import cover1 from "../Resources/img/demo1.png";
-import cover2 from "../Resources/img/demo2.png";
-import cover3 from "../Resources/img/demo3.png";
-import cover4 from "../Resources/img/demo4.png";
-import cover5 from "../Resources/img/demo5.png";
-import cover6 from "../Resources/img/demo6.png";
+import { useInView } from "../hooks/useInView";
+import cover1 from "../styles/img/demo1.png";
+import cover2 from "../styles/img/demo2.png";
+import cover3 from "../styles/img/demo3.png";
+import cover4 from "../styles/img/demo4.png";
+import cover5 from "../styles/img/demo5.png";
+import cover6 from "../styles/img/demo6.png";
 
 const demos = [
   {

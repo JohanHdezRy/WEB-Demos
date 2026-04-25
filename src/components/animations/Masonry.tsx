@@ -6,8 +6,8 @@ import React, {
   useState,
 } from "react";
 import { gsap } from "gsap";
-import { useMedia } from "../Hooks/useMedia";
-import { useMeasure } from "../Hooks/useMeasure";
+import { useMedia } from "../../hooks/useMedia";
+import { useMeasure } from "../../hooks/useMeasure";
 
 const preloadImages = async (urls: string[]): Promise<void> => {
   await Promise.all(

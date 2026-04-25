@@ -32,10 +32,10 @@ export function useMenuCard(imageCount: number, idx: number) {
             setIncoming(null)
             setIsSliding(false)
             animating.current = false
-          }, 1100)
+          }, 1800)
         })
       })
-    }, 2000 + idx * 200)
+    }, 3200 + idx * 300)
 
     return () => clearInterval(timer)
   }, [imageCount, idx])

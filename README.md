@@ -30,56 +30,79 @@ A curated portfolio of **6 production-quality web demos** exploring different de
 
 ---
 
-## Libraries
-
-| Library                                                                                              | Role                                                             |
-| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| [GSAP](https://greensock.com/gsap/)                                                                  | Core animation engine — timelines, ScrollTrigger, elastic easing |
-| [Motion (Framer Motion)](https://motion.dev/)                                                        | Spring animations, scroll-velocity marquee, presence transitions |
-| [Lenis](https://lenis.darkroom.engineering/)                                                         | Smooth scroll                                                    |
-| [ogl](https://github.com/oframe/ogl)                                                                 | WebGL — custom shader backgrounds (FloatingLines)                |
-| [React Three Fiber + Drei](https://docs.pmnd.rs/react-three-fiber)                                   | 3D scenes where needed                                           |
-| [clsx](https://github.com/lukeed/clsx) + [tailwind-merge](https://github.com/dcastil/tailwind-merge) | Conditional class composition via `cn()`                         |
-| [tw-animate-css](https://github.com/imskyleen/tw-animate-css)                                        | Extended Tailwind animation utilities                            |
-| [Lucide React](https://lucide.dev/)                                                                  | Icon set                                                         |
-
----
-
 ## Project Structure
 
 ```
-src/
-├── Effects/              # Reusable animation components
-│   ├── FloatingLines.tsx
-│   ├── FuzzyText.tsx
-│   ├── InfiniteMenu.tsx
-│   ├── CardSwap.tsx
-│   ├── BounceCards.tsx
-│   ├── AnimatedContent.tsx
-│   ├── ScrollReveal.tsx
-│   └── Masonry.tsx
-├── Hooks/                # Custom hooks
-│   ├── useFonts.ts
-│   ├── useLenis.ts
-│   ├── useInView.ts
-│   ├── useVinylRoulette.ts
-│   └── ...
-├── components/
-│   ├── ui/               # shadcn/ui components
-│   └── Folder.tsx        # React Bits Folder
-├── Resources/
-│   └── img/              # Local image assets (vinyl covers, demo thumbnails)
-└── pages/
-    ├── Landing.tsx        # Portfolio index
-    ├── demo-1/            # CloudX — SaaS
-    ├── demo-2/            # Rinacita — Restaurant
-    ├── demo-3/            # Red-Wolf — Energy Drink
-    ├── demo-4/            # NightCity — Vinyl Store
-    ├── demo-5/            # Maison — Fashion
-    └── demo-6/            # DWIS·M — Dashboard
-.github/
-└── workflows/
-    └── deploy.yml         # GitHub Actions → GitHub Pages
+├── src/
+│   ├── main.tsx                 # Bootstrap de React + BrowserRouter
+│   ├── App.tsx             # Rutas principales y lazy loading de demos
+│   ├── index.css                # Estilos globales
+│   ├── lib/
+│   │   └── utils.ts             # Helpers compartidos
+│   ├── hooks/                   # Hooks reutilizables entre demos
+│   │   ├── useFonts.ts
+│   │   ├── useInView.ts
+│   │   ├── useLenis.ts
+│   │   ├── useMedia.ts
+│   │   ├── useMeasure.ts
+│   │   ├── useElementWidth.ts
+│   │   ├── useSpotlight.ts
+│   │   ├── useVinylRoulette.ts
+│   │   └── useMenuCard.ts
+│   ├── components/
+│   │   ├── Folder.tsx
+│   │   ├── ui/                  # Componentes base de UI
+│   │   │   └── button.tsx
+│   │   └── animations/          # Piezas visuales reutilizables
+│   │       ├── AnimatedContent.tsx
+│   │       ├── BounceCards.tsx
+│   │       ├── CardSwap.tsx
+│   │       ├── FloatingLines.tsx
+│   │       ├── FuzzyText.tsx
+│   │       ├── InfiniteMenu.tsx
+│   │       ├── Masonry.tsx
+│   │       └── ScrollReveal.tsx
+│   ├── styles/
+│   │   ├── img/                 # Thumbnails y assets visuales
+│   │   └── video/               # Videos locales usados por demos
+│   └── pages/
+│       ├── Landing.tsx        # Pantalla indice con acceso a las demos
+│       ├── demo-1/              # CloudX
+│       │   ├── CloudX.tsx
+│       │   ├── components/
+│       │   ├── data/
+│       │   ├── hooks/
+│       │   └── types/
+│       ├── demo-2/              # Rinacita
+│       │   ├── Rinacita.tsx
+│       │   ├── components/
+│       │   ├── data/
+│       │   ├── hooks/
+│       │   └── types/
+│       ├── demo-3/              # Red-Wolf
+│       │   ├── lupa.tsx
+│       │   ├── components/
+│       │   ├── data/
+│       │   ├── hooks/
+│       │   └── types/
+│       ├── demo-4/              # NightCity
+│       │   ├── NightCity.tsx
+│       │   ├── components/
+│       │   ├── data/
+│       │   ├── hooks/
+│       │   └── types/
+│       ├── demo-5/              # Maison
+│       │   ├── Fashion.tsx
+│       │   ├── components/
+│       │   ├── data/
+│       │   └── types/
+│       └── demo-6/              # DWIS·M
+│           ├── Dashboard.tsx
+│           ├── components/
+│           ├── data/
+│           ├── hooks/
+│           └── types/
+└── README.md
 ```
 
 ---
