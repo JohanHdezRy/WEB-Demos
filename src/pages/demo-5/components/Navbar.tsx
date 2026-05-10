@@ -1,21 +1,12 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { NAV_LINKS } from "../data/fashionData";
+import { useNavbarAnimations } from "../hooks/useNavbarAnimations";
 
 export function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useGSAP(() => {
-    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.fromTo(
-        navRef.current,
-        { y: -80, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.3 },
-      );
-    });
-  }, { scope: navRef });
+  useNavbarAnimations(navRef);
 
   return (
     <>

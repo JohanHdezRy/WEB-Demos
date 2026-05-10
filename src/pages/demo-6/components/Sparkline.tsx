@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { S } from "../data/tokens";
+import { usePathDrawAnimation } from "../hooks/useChartAnimations";
 
 interface SparklineProps {
   color?: string;
@@ -8,6 +8,8 @@ interface SparklineProps {
 
 export function Sparkline({ color = S.green }: SparklineProps) {
   const ref = useRef<SVGPathElement>(null);
+  usePathDrawAnimation(ref);
+
   const points = [10, 20, 12, 28, 18, 35, 25, 40, 30, 45];
   const w = 100;
   const h = 40;
@@ -17,18 +19,6 @@ export function Sparkline({ color = S.green }: SparklineProps) {
         `${i === 0 ? "M" : "L"} ${(i / (points.length - 1)) * w} ${h - p}`,
     )
     .join(" ");
-
-  useGSAP(() => {
-    if (!ref.current) return;
-    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
-      const len = ref.current!.getTotalLength();
-      gsap.fromTo(
-        ref.current,
-        { strokeDashoffset: len, strokeDasharray: len },
-        { strokeDashoffset: 0, duration: 1.5, delay: 0.8, ease: "power2.out" },
-      );
-    });
-  }, {});
 
   return (
     <svg width="100" height="40" viewBox={`0 0 ${w} ${h}`}>

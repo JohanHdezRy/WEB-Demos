@@ -1,33 +1,12 @@
 import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 import { LOOKS } from "../data/fashionData";
+import { useLooksAnimations } from "../hooks/useLooksAnimations";
 
 export function LooksSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    const section = sectionRef.current;
-    const track = trackRef.current;
-    if (!section || !track) return;
-
-    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
-      const totalWidth = track.scrollWidth - window.innerWidth;
-      gsap.to(track, {
-        x: -totalWidth,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${totalWidth}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-        },
-      });
-    });
-  }, { scope: sectionRef });
+  useLooksAnimations(sectionRef, trackRef);
 
   return (
     <section ref={sectionRef} className="bg-stone-900 overflow-hidden">

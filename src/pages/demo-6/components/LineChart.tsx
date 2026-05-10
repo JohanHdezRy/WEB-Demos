@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { S } from "../data/tokens";
+import { usePathDrawAnimation } from "../hooks/useChartAnimations";
 
 interface LineChartProps {
   color?: string;
@@ -8,6 +8,8 @@ interface LineChartProps {
 
 export function LineChart({ color = S.green }: LineChartProps) {
   const ref = useRef<SVGPathElement>(null);
+  usePathDrawAnimation(ref, { duration: 2, delay: 0.5 });
+
   const points = [30, 45, 35, 60, 50, 72, 58, 80, 65, 90, 70, 95];
   const w = 320;
   const h = 100;
@@ -18,18 +20,6 @@ export function LineChart({ color = S.green }: LineChartProps) {
     )
     .join(" ");
   const gradId = `lg-${color.replace("#", "")}`;
-
-  useGSAP(() => {
-    if (!ref.current) return;
-    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
-      const len = ref.current!.getTotalLength();
-      gsap.fromTo(
-        ref.current,
-        { strokeDashoffset: len, strokeDasharray: len },
-        { strokeDashoffset: 0, duration: 2, delay: 0.5, ease: "power2.out" },
-      );
-    });
-  }, {});
 
   return (
     <svg

@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { S } from "../data/tokens";
+import { useDonutAnimation } from "../hooks/useChartAnimations";
 
 interface DonutChartProps {
   pct: number;
@@ -19,29 +19,7 @@ export function DonutChart({
   const circ = 2 * Math.PI * r;
   const dash = (pct / 100) * circ;
   const ref = useRef<SVGCircleElement>(null);
-
-  useGSAP(
-    () => {
-      if (!ref.current) return;
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(ref.current, { strokeDashoffset: circ - dash });
-      });
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.fromTo(
-          ref.current,
-          { strokeDashoffset: circ },
-          {
-            strokeDashoffset: circ - dash,
-            duration: 1.5,
-            delay: 0.4,
-            ease: "power2.out",
-          },
-        );
-      });
-    },
-    { dependencies: [circ, dash] },
-  );
+  useDonutAnimation(ref, circ, dash);
 
   return (
     <svg

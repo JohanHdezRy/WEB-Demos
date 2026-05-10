@@ -43,7 +43,11 @@ export default function AnimatedContent({
       gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
         gsap.fromTo(
           el,
-          { [axis]: offset, opacity: animateOpacity ? initialOpacity : 1, scale },
+          {
+            [axis]: offset,
+            opacity: animateOpacity ? initialOpacity : 1,
+            scale,
+          },
           {
             [axis]: 0,
             opacity: 1,

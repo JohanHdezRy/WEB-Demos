@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { S } from "../data/tokens";
+import { useBarChartAnimation } from "../hooks/useChartAnimations";
 
 interface BarChartProps {
   data: { label: string; value: number }[];
@@ -13,36 +13,7 @@ export function BarChart({ data, height = 80, color = S.blue }: BarChartProps) {
   const max = Math.max(...data.map((d) => d.value));
   const w = 300;
   const barW = Math.floor(w / data.length) - 4;
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        barsRef.current.forEach((bar, i) => {
-          if (!bar) return;
-          const finalH = (data[i].value / max) * height;
-          gsap.set(bar, { attr: { height: finalH, y: height - finalH } });
-        });
-      });
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        barsRef.current.forEach((bar, i) => {
-          if (!bar) return;
-          const finalH = (data[i].value / max) * height;
-          gsap.fromTo(
-            bar,
-            { attr: { height: 0, y: height } },
-            {
-              attr: { height: finalH, y: height - finalH },
-              duration: 0.8,
-              delay: 0.3 + i * 0.07,
-              ease: "power2.out",
-            },
-          );
-        });
-      });
-    },
-    { dependencies: [data, max, height] },
-  );
+  useBarChartAnimation(barsRef, data, max, height);
 
   return (
     <svg
