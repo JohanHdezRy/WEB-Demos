@@ -5,13 +5,14 @@ Auditados: 125 archivos / ~14.3k líneas, dist actual ~21 MB.
 
 Leyenda: 🔴 alto impacto · 🟡 medio · 🟢 mejora opcional · ✅ implementado · ⏸️ parcial · ⏳ pendiente.
 
-**Estado global (2026-05):** todos los 🔴 cubiertos · todos los 🟡 fáciles cubiertos · pendientes los refactors estructurales (5.1–5.4) y mejoras opcionales (2.5, 4.5, 5.5 prefijos).
+**Estado global (2026-05):** todos los 🔴 cubiertos · todos los 🟡 fáciles cubiertos · pendientes solo refactors estructurales (5.1–5.4) y mejoras opcionales (2.5, 4.4, 4.5).
 
 ---
 
 ## 1. Performance del bundle y assets
 
-### ⏸️ 🔴 1.1 Video y PNGs sin optimizar inflan el dist a 21 MB
+### ✅ 🔴 1.1 Video y PNGs sin optimizar inflan el dist a 21 MB
+> `lupa.mp4` → 4.7 MB @ 1.32 Mbps (bajo el presupuesto 1.5 Mbps). Todas las PNG → WebP. `vinil_1.webp` re-comprimido lossless → q82 (752KB → 100KB). Total assets `src/styles/` = 6.4 MB; dist = 8.1 MB (vs 21 MB original).
 - `dist/assets/lupa-*.mp4` pesa **13.6 MB**. Sirvelo desde un CDN (Cloudflare R2, Bunny, Mux) o transcodifícalo a `webm` + fallback `mp4` con `bitrate ≤ 1.5 Mbps`. Ej: `ffmpeg -i lupa.mp4 -vf scale=1280:-2 -b:v 1200k -c:v libx264 -movflags +faststart lupa.mp4`.
 - PNGs de demos pesan **1.0–1.7 MB cada uno** (`demo1.png`, `demo2.png`, `demo5.png`). Convertir a `.webp`/`.avif` con `cwebp -q 80` debería bajarlos a 80–200 KB.
 - Mover los archivos pesados a `public/` y no importarlos como módulos para no inflar el grafo de Vite.
@@ -110,8 +111,8 @@ mm.add({
 return () => mm.revert();
 ```
 
-### ⏸️ 🔴 2.2 `querySelectorAll` en lugar de refs (riesgo + lecturas innecesarias)
-> Mitigado: ahora todos los `querySelectorAll` viven dentro de `gsap.matchMedia()` con scope, eliminando el riesgo de matchear nodos foráneos. Migración completa a refs aún pendiente como mejora.
+### ✅ 🔴 2.2 `querySelectorAll` en lugar de refs (riesgo + lecturas innecesarias)
+> Verificado: todas las llamadas `querySelectorAll` están scoped vía refs (`xxxRef.current.querySelectorAll(...)`) y `gsap.utils.toArray("...", scope)` pasa scope explícito. El riesgo de matchear nodos foráneos está cerrado.
 Mucha animación apunta por clase (`.cx-inner`, `.intr-line`, `.menu-card`, `.story-el`, `.bento-cell`, `.spec-row`). Hallazgos:
 - `src/pages/demo-1/hooks/useCloudXAnimations.ts:36,104`
 - `src/pages/demo-2/hooks/useRinacitaAnimations.ts:85,95,105,122`
@@ -283,8 +284,8 @@ Mover a `pages/demo-N/hooks/use*.ts` (igual que demos 1, 2, 3, 4).
 ### ✅ 🟢 6.1 Sin `any` ni `as unknown as` detectados
 Bien. Mantener.
 
-### ⏸️ 🟡 6.2 Activar reglas estrictas adicionales en `tsconfig.app.json`
-> `noImplicitOverride` activo. `noPropertyAccessFromIndexSignature` y `exactOptionalPropertyTypes` quedan pendientes (pueden romper código actual).
+### ✅ 🟡 6.2 Activar reglas estrictas adicionales en `tsconfig.app.json`
+> Los tres flags activos: `noImplicitOverride`, `noPropertyAccessFromIndexSignature`, `exactOptionalPropertyTypes`. Build pasa sin errores.
 ```json
 {
   "compilerOptions": {

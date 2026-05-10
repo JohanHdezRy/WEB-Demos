@@ -17,7 +17,7 @@ export function useFonts(href: string): void {
     link.rel = "stylesheet";
     link.href = href;
     link.media = "print";
-    link.dataset.fonts = href;
+    link.dataset["fonts"] = href;
     link.onload = () => { link.media = "all"; };
     document.head.appendChild(link);
     loaded.add(href);
