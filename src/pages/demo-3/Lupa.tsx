@@ -5,7 +5,6 @@ import { useLenis } from "../../hooks/useLenis";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { FONTS_HREF, T } from "./data/tokens";
 import { useLupaAnimations } from "./hooks/useLupaAnimations";
-import { GlobalStyles } from "./components/GlobalStyles";
 import { NavBar } from "./components/NavBar";
 import { HeroSection } from "./components/HeroSection";
 import { ReelSection } from "./components/ReelSection";
@@ -45,42 +44,12 @@ export function Lupa() {
 
   return (
     <div
-      style={{
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-        background: T.bg,
-        color: T.onBg,
-        overflowX: "hidden",
-      }}
+      className="theme-lupa lupa-page font-[Plus_Jakarta_Sans] overflow-x-hidden"
+      style={{ background: T.bg, color: T.onBg }}
     >
-      <GlobalStyles />
       <Link
         to="/"
-        style={{
-          position: "fixed",
-          top: 16,
-          left: 16,
-          zIndex: 200,
-          color: "rgba(255,255,255,0.55)",
-          fontSize: "0.72rem",
-          textDecoration: "none",
-          letterSpacing: "0.05em",
-          background: "rgba(0,0,0,0.35)",
-          backdropFilter: "blur(8px)",
-          border: "1px solid rgba(255,255,255,0.12)",
-          padding: "6px 12px",
-          borderRadius: 20,
-          transition: "color 0.2s, background 0.2s",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.color = "#fff";
-          (e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.6)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.color =
-            "rgba(255,255,255,0.55)";
-          (e.currentTarget as HTMLElement).style.background =
-            "rgba(0,0,0,0.35)";
-        }}
+        className="fixed top-4 left-4 z-[200] text-[0.72rem] tracking-[0.05em] px-3 py-1.5 rounded-[20px] border border-white/10 bg-black/35 backdrop-blur-[8px] text-white/55 transition-colors hover:text-white hover:bg-black/60"
       >
         &#8592; Demos
       </Link>

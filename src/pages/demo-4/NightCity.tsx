@@ -18,12 +18,8 @@ export function NightCity() {
 
   return (
     <div
-      style={{
-        background: C.bg,
-        color: C.text,
-        overflowX: "hidden",
-        minHeight: "100vh",
-      }}
+      className="theme-nightcity nightcity-page overflow-x-hidden min-h-screen"
+      style={{ background: C.bg, color: C.text }}
     >
       <style>{styles}</style>
 

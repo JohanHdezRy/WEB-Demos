@@ -1,13 +1,12 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { HERO_VIDEO } from "../data/fashionData";
 
 export function HeroSection() {
   const titleRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const mm = gsap.matchMedia(titleRef);
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+  useGSAP(() => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
       gsap.fromTo(
         ".hero-line",
         { yPercent: 110 },
@@ -20,8 +19,7 @@ export function HeroSection() {
         },
       );
     });
-    return () => mm.revert();
-  }, []);
+  }, { scope: titleRef });
 
   return (
     <section className="relative w-full h-screen overflow-hidden bg-black">

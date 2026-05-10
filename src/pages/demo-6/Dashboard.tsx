@@ -26,13 +26,11 @@ export function Dashboard() {
 
   return (
     <div
+      className="theme-noc min-h-screen flex text-[0.85rem]"
       style={{
         fontFamily: "var(--font-poppins)",
         background: S.bg,
-        minHeight: "100vh",
-        display: "flex",
         color: S.text,
-        fontSize: "0.85rem",
       }}
     >
       <Sidebar

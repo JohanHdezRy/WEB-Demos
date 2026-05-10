@@ -1,5 +1,5 @@
-import { useEffect, type RefObject } from "react";
-import { gsap, ScrollTrigger, SplitText } from "@/lib/gsap";
+import { type RefObject } from "react";
+import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
 
 interface AnimationRefs {
   navRef: RefObject<HTMLElement | null>;
@@ -28,9 +28,8 @@ export function useRinacitaAnimations({
   galleryRef,
   pageRef,
 }: AnimationRefs) {
-  useEffect(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+  useGSAP(() => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.call(() => {
         if (heroVidRef.current)
@@ -59,12 +58,10 @@ export function useRinacitaAnimations({
       tl.from(heroTagRef.current, { opacity: 0, y: 16, duration: 0.8 }, "-=0.4");
       tl.from(heroCtaRef.current, { opacity: 0, y: 16, duration: 0.6 }, "-=0.5");
     });
-    return () => mm.revert();
-  }, []);
+  }, { scope: pageRef });
 
-  useEffect(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+  useGSAP(() => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
       ScrollTrigger.create({
         start: "top -60",
         onEnter: () =>
@@ -139,6 +136,5 @@ export function useRinacitaAnimations({
           });
         });
     });
-    return () => mm.revert();
-  }, []);
+  }, { scope: pageRef });
 }

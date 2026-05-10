@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { S } from "../data/tokens";
 
 interface LineChartProps {
@@ -19,10 +19,9 @@ export function LineChart({ color = S.green }: LineChartProps) {
     .join(" ");
   const gradId = `lg-${color.replace("#", "")}`;
 
-  useEffect(() => {
+  useGSAP(() => {
     if (!ref.current) return;
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
       const len = ref.current!.getTotalLength();
       gsap.fromTo(
         ref.current,
@@ -30,8 +29,7 @@ export function LineChart({ color = S.green }: LineChartProps) {
         { strokeDashoffset: 0, duration: 2, delay: 0.5, ease: "power2.out" },
       );
     });
-    return () => mm.revert();
-  }, []);
+  }, {});
 
   return (
     <svg

@@ -46,12 +46,8 @@ export function Rinacita() {
   return (
     <div
       ref={pageRef}
-      style={{
-        background: C.bg,
-        color: C.dark,
-        overflowX: "hidden",
-        fontFamily: "system-ui,-apple-system,sans-serif",
-      }}
+      className="theme-rinacita rinacita-page overflow-x-hidden font-sans"
+      style={{ background: C.bg, color: C.dark }}
     >
       <Nav
         navRef={navRef}
@@ -71,21 +67,6 @@ export function Rinacita() {
       <Gallery galleryRef={galleryRef} />
       <Cta />
       <Footer />
-
-      <style>{`
-        @media (max-width: 768px) {
-          .ri-nav-links { display: none !important; }
-          .ri-hamburger { display: flex !important; }
-          .ri-intro-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .ri-menu-grid { grid-template-columns: 1fr !important; }
-          .ri-story-grid { grid-template-columns: 1fr !important; }
-          .ri-stats-grid { grid-template-columns: 1fr !important; }
-          .ri-footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; padding: 40px 24px !important; }
-        }
-        @media (max-width: 480px) {
-          .ri-footer-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </div>
   );
 }

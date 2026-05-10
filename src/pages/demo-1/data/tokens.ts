@@ -1,14 +1,16 @@
 import type { DesignTokens } from "../types";
 
+// Values resolve from .theme-cloudx CSS variables in src/index.css.
+// Edit the colors there; this file just re-exports the semantic names.
 export const T: DesignTokens = {
-  bg: "#09090b",
-  text: "#f5f5f0",
-  muted: "rgba(245,245,240,0.7)",
-  muted2: "rgba(245,245,240,0.45)",
-  border: "rgba(255,255,255,0.08)",
-  borderHi: "rgba(255,255,255,0.18)",
-  surface: "#202020",
-  glass: "rgba(200,200,200,0.1)",
-  accentBg: "#f5f5f0",
-  accentTx: "#09090b",
+  bg:       "var(--cx-bg)",
+  text:     "var(--cx-text)",
+  muted:    "var(--cx-muted)",
+  muted2:   "var(--cx-muted2)",
+  border:   "var(--cx-border)",
+  borderHi: "var(--cx-borderHi)",
+  surface:  "var(--cx-surface)",
+  glass:    "var(--cx-glass)",
+  accentBg: "var(--cx-accentBg)",
+  accentTx: "var(--cx-accentTx)",
 };

@@ -1,17 +1,18 @@
+// Values resolve from .theme-lupa CSS variables in src/index.css.
 export const T = {
-  bg: "#0d0d0d",
-  bgLow: "#000000",
-  surface: "#161616",
-  surfaceVar: "#222222",
-  primary: "#f72585",
-  primaryDim: "#b5179e",
-  primaryGlow: "rgba(247,37,133,0.25)",
-  secondaryDim: "#e8c4f0",
-  outline: "#767575",
-  outlineVar: "#3a3a3a",
-  onBg: "#ffffff",
-  onPrimary: "#1a0010",
-  onSurfaceVar: "#909090",
+  bg:           "var(--lu-bg)",
+  bgLow:        "var(--lu-bgLow)",
+  surface:      "var(--lu-surface)",
+  surfaceVar:   "var(--lu-surfaceVar)",
+  primary:      "var(--lu-primary)",
+  primaryDim:   "var(--lu-primaryDim)",
+  primaryGlow:  "var(--lu-primaryGlow)",
+  secondaryDim: "var(--lu-secondaryDim)",
+  outline:      "var(--lu-outline)",
+  outlineVar:   "var(--lu-outlineVar)",
+  onBg:         "var(--lu-onBg)",
+  onPrimary:    "var(--lu-onPrimary)",
+  onSurfaceVar: "var(--lu-onSurfaceVar)",
 };
 
 export const FONTS_HREF =

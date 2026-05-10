@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { S } from "../data/tokens";
 import { DonutChart } from "./DonutChart";
 
@@ -26,41 +26,43 @@ export function MetricCard({
 }: MetricCardProps) {
   const valRef = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
-    if (donut || typeof value === "string") return;
-    const target =
-      typeof value === "number"
-        ? value
-        : parseFloat(String(value).replace(/[$,]/g, ""));
-    const setFinal = () => {
-      if (valRef.current)
-        valRef.current.textContent =
-          prefix +
-          target.toLocaleString("en-US", { maximumFractionDigits: 0 }) +
-          suffix;
-    };
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: reduce)", () => {
-      setFinal();
-    });
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const obj = { val: 0 };
-      gsap.to(obj, {
-        val: target,
-        duration: 1.5,
-        delay: 0.4,
-        ease: "power2.out",
-        onUpdate: () => {
-          if (valRef.current)
-            valRef.current.textContent =
-              prefix +
-              obj.val.toLocaleString("en-US", { maximumFractionDigits: 0 }) +
-              suffix;
-        },
+  useGSAP(
+    () => {
+      if (donut || typeof value === "string") return;
+      const target =
+        typeof value === "number"
+          ? value
+          : parseFloat(String(value).replace(/[$,]/g, ""));
+      const setFinal = () => {
+        if (valRef.current)
+          valRef.current.textContent =
+            prefix +
+            target.toLocaleString("en-US", { maximumFractionDigits: 0 }) +
+            suffix;
+      };
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        setFinal();
       });
-    });
-    return () => mm.revert();
-  }, [value, prefix, suffix, donut]);
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const obj = { val: 0 };
+        gsap.to(obj, {
+          val: target,
+          duration: 1.5,
+          delay: 0.4,
+          ease: "power2.out",
+          onUpdate: () => {
+            if (valRef.current)
+              valRef.current.textContent =
+                prefix +
+                obj.val.toLocaleString("en-US", { maximumFractionDigits: 0 }) +
+                suffix;
+          },
+        });
+      });
+    },
+    { dependencies: [value, prefix, suffix, donut] },
+  );
 
   return (
     <div

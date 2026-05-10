@@ -1,5 +1,5 @@
-import { useEffect, type RefObject } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { type RefObject } from "react";
+import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { GALLERY } from "../data/galleryData";
 
 interface UseLupaAnimationsParams {
@@ -27,9 +27,8 @@ export function useLupaAnimations({
   galleryRef,
   ctaRef,
 }: UseLupaAnimationsParams) {
-  useEffect(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+  useGSAP(() => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
       tl.from(heroTagRef.current, { opacity: 0, y: 16, duration: 0.7 }, 0.3)
         .from(heroH1Ref.current, { opacity: 0, y: 60, duration: 1.1 }, 0.5)
@@ -119,7 +118,5 @@ export function useLupaAnimations({
         el?.removeEventListener("mouseleave", onLeave);
       };
     });
-
-    return () => mm.revert();
-  }, []);
+  }, {});
 }

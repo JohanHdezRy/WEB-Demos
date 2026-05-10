@@ -1,5 +1,5 @@
-import { useEffect, useRef, type ReactNode } from "react";
-import { gsap } from "@/lib/gsap";
+import { useRef, type ReactNode } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 
 interface AnimatedContentProps {
   children: ReactNode;
@@ -32,51 +32,50 @@ export default function AnimatedContent({
 }: AnimatedContentProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+  useGSAP(
+    () => {
+      const el = ref.current;
+      if (!el) return;
 
-    const axis = direction === "horizontal" ? "x" : "y";
-    const offset = reverse ? -distance : distance;
+      const axis = direction === "horizontal" ? "x" : "y";
+      const offset = reverse ? -distance : distance;
 
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.fromTo(
-        el,
-        {
-          [axis]: offset,
-          opacity: animateOpacity ? initialOpacity : 1,
-          scale,
-        },
-        {
-          [axis]: 0,
-          opacity: 1,
-          scale: 1,
-          duration,
-          ease,
-          delay,
-          scrollTrigger: {
-            trigger: el,
-            start: `top ${(1 - threshold) * 100}%`,
-            once: true,
+      gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          el,
+          { [axis]: offset, opacity: animateOpacity ? initialOpacity : 1, scale },
+          {
+            [axis]: 0,
+            opacity: 1,
+            scale: 1,
+            duration,
+            ease,
+            delay,
+            scrollTrigger: {
+              trigger: el,
+              start: `top ${(1 - threshold) * 100}%`,
+              once: true,
+            },
           },
-        },
-      );
-    });
-
-    return () => mm.revert();
-  }, [
-    distance,
-    direction,
-    reverse,
-    duration,
-    ease,
-    initialOpacity,
-    animateOpacity,
-    scale,
-    threshold,
-    delay,
-  ]);
+        );
+      });
+    },
+    {
+      scope: ref,
+      dependencies: [
+        distance,
+        direction,
+        reverse,
+        duration,
+        ease,
+        initialOpacity,
+        animateOpacity,
+        scale,
+        threshold,
+        delay,
+      ],
+    },
+  );
 
   return (
     <div ref={ref} className={className}>

@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { S } from "../data/tokens";
 
 interface DonutChartProps {
@@ -20,26 +20,28 @@ export function DonutChart({
   const dash = (pct / 100) * circ;
   const ref = useRef<SVGCircleElement>(null);
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: reduce)", () => {
-      gsap.set(ref.current, { strokeDashoffset: circ - dash });
-    });
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.fromTo(
-        ref.current,
-        { strokeDashoffset: circ },
-        {
-          strokeDashoffset: circ - dash,
-          duration: 1.5,
-          delay: 0.4,
-          ease: "power2.out",
-        },
-      );
-    });
-    return () => mm.revert();
-  }, [circ, dash]);
+  useGSAP(
+    () => {
+      if (!ref.current) return;
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(ref.current, { strokeDashoffset: circ - dash });
+      });
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          ref.current,
+          { strokeDashoffset: circ },
+          {
+            strokeDashoffset: circ - dash,
+            duration: 1.5,
+            delay: 0.4,
+            ease: "power2.out",
+          },
+        );
+      });
+    },
+    { dependencies: [circ, dash] },
+  );
 
   return (
     <svg

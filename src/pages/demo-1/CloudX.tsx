@@ -18,8 +18,6 @@ import { Testimonials } from "./components/Testimonials";
 import { PartnerCTA } from "./components/PartnerCTA";
 import { Footer } from "./components/Footer";
 import { BottomBar } from "./components/BottomBar";
-import { GlobalStyles } from "./components/GlobalStyles";
-
 export function CloudX() {
   const navRef = useRef<HTMLElement>(null);
   const heroOverlayRef = useRef<HTMLDivElement>(null);
@@ -49,12 +47,8 @@ export function CloudX() {
   return (
     <div
       ref={pageRef}
-      style={{
-        background: T.bg,
-        color: T.text,
-        overflowX: "hidden",
-        fontFamily: "system-ui,-apple-system,sans-serif",
-      }}
+      className="theme-cloudx cloudx-page overflow-x-hidden font-sans"
+      style={{ background: T.bg, color: T.text }}
     >
       <Navbar
         navRef={navRef}
@@ -81,7 +75,6 @@ export function CloudX() {
       <PartnerCTA />
       <Footer />
       <BottomBar bottomBarRef={bottomBarRef} />
-      <GlobalStyles />
     </div>
   );
 }

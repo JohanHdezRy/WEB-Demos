@@ -1,5 +1,5 @@
-import { useEffect, useRef, type ElementType, type ReactNode } from "react";
-import { gsap } from "@/lib/gsap";
+import { useRef, type ElementType, type ReactNode } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -31,49 +31,51 @@ export default function ScrollReveal({
 
   const text = typeof children === "string" ? children : "";
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
+  useGSAP(
+    () => {
+      const el = containerRef.current;
+      if (!el) return;
+      const words = el.querySelectorAll<HTMLElement>(".word");
 
-    const words = el.querySelectorAll<HTMLElement>(".word");
-
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      words.forEach((word) => {
-        gsap.fromTo(
-          word,
-          {
-            opacity: baseOpacity,
-            rotationX: baseRotation,
-            ...(enableBlur && { filter: `blur(${blurStrength}px)` }),
-          },
-          {
-            opacity: 1,
-            rotationX: rotationEnd,
-            ...(enableBlur && { filter: "blur(0px)" }),
-            ease: "power2.out",
-            duration: 0.6,
-            scrollTrigger: {
-              trigger: word,
-              start: "top 90%",
-              end: wordAnimationEnd,
-              scrub: false,
-              once: true,
+      gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+        words.forEach((word) => {
+          gsap.fromTo(
+            word,
+            {
+              opacity: baseOpacity,
+              rotationX: baseRotation,
+              ...(enableBlur && { filter: `blur(${blurStrength}px)` }),
             },
-          },
-        );
+            {
+              opacity: 1,
+              rotationX: rotationEnd,
+              ...(enableBlur && { filter: "blur(0px)" }),
+              ease: "power2.out",
+              duration: 0.6,
+              scrollTrigger: {
+                trigger: word,
+                start: "top 90%",
+                end: wordAnimationEnd,
+                scrub: false,
+                once: true,
+              },
+            },
+          );
+        });
       });
-    });
-
-    return () => mm.revert();
-  }, [
-    baseOpacity,
-    baseRotation,
-    blurStrength,
-    enableBlur,
-    rotationEnd,
-    wordAnimationEnd,
-  ]);
+    },
+    {
+      scope: containerRef,
+      dependencies: [
+        baseOpacity,
+        baseRotation,
+        blurStrength,
+        enableBlur,
+        rotationEnd,
+        wordAnimationEnd,
+      ],
+    },
+  );
 
   if (typeof children !== "string") {
     return (

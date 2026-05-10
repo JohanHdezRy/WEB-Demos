@@ -5,7 +5,7 @@ Auditados: 125 archivos / ~14.3k líneas, dist actual ~21 MB.
 
 Leyenda: 🔴 alto impacto · 🟡 medio · 🟢 mejora opcional · ✅ implementado · ⏸️ parcial · ⏳ pendiente.
 
-**Estado global (2026-05):** todos los 🔴 cubiertos · todos los 🟡 fáciles cubiertos · pendientes solo refactors estructurales (5.1–5.4) y mejoras opcionales (2.5, 4.4, 4.5).
+**Estado global (2026-05):** todos los 🔴 cubiertos · todos los 🟡 cubiertos salvo 5.3 (dedupe demo-6) y 5.4 (extraer GSAP a hooks separados — actualmente vive inline pero ya con useGSAP). Mejoras opcionales 🟢 al día.
 
 ---
 
@@ -134,7 +134,8 @@ Problemas:
 ### ✅ 🟡 2.4 `AnimatedContent.tsx` reanima cada vez que cambia cualquier prop
 `src/components/animations/AnimatedContent.tsx:70-81` lleva 10 dependencias en el `useEffect`. Si el padre re-renderiza con literales (`<AnimatedContent distance={60} ...>` con número inline está OK), pero cualquier objeto/función nuevo dispararía un revert + re-create. Aceptable en estado actual; documentar o migrar a `@gsap/react` `useGSAP({ revertOnUpdate: false })` para tener control explícito.
 
-### ⏳ 🟡 2.5 Migrar al hook oficial `@gsap/react`
+### ✅ 🟡 2.5 Migrar al hook oficial `@gsap/react`
+> `@gsap/react` instalado y registrado en `src/lib/gsap.ts`. Migrados a `useGSAP({ scope, dependencies })`: AnimatedContent, ScrollReveal, los 3 hooks de animación (CloudX, Rinacita, Lupa) y los 8 componentes con GSAP inline (demo-5 Hero/Looks/Navbar + demo-6 los 5 charts).
 La convención del usuario menciona `useGSAP`, pero el paquete `@gsap/react` no está en `package.json`. Vale la pena instalarlo:
 ```bash
 npm i @gsap/react
@@ -223,10 +224,12 @@ const key = queries.join('|');
 useEffect(() => { ... }, [key]);
 ```
 
-### ⏳ 🟡 4.4 `useInView.ts` desconecta tras primer hit pero re-monta el observer si cambia threshold
+### ✅ 🟡 4.4 `useInView.ts` desconecta tras primer hit pero re-monta el observer si cambia threshold
+> Verificado: `useInView.ts:8` ya tiene `if (visible || !ref.current) return` — re-runs tras visible no crean observer nuevo.
 Aceptable. Solo añadir `if (visible) return` para evitar reconfigurar después de visible.
 
-### ⏳ 🟢 4.5 Consolidar tokens en CSS variables globales
+### ✅ 🟢 4.5 Consolidar tokens en CSS variables globales
+> Bloques `.theme-cloudx | .theme-rinacita | .theme-lupa | .theme-nightcity | .theme-noc` en `src/index.css`. Cada `tokens.ts` ahora apunta a `var(--prefix-name)` manteniendo type safety. Demo wrappers añaden la clase `.theme-X`. Fuente única en CSS — los hex se editan en index.css.
 Cada demo tiene su propio `tokens.ts` (`T`, `C`, `S`, etc.). Migrar a CSS variables en `:root` con scope por clase de demo:
 ```css
 .theme-cloudx { --bg: #09090b; --muted: rgba(245,245,240,0.45); ... }
@@ -237,7 +240,8 @@ Beneficios: uso desde Tailwind v4 (`text-[--muted]`), menos re-render por inline
 
 ## 5. Convenciones de código y duplicación
 
-### ⏳ 🟡 5.1 Mezcla de inline styles + Tailwind + CSS-in-JS
+### ✅ 🟡 5.1 Mezcla de inline styles + Tailwind + CSS-in-JS
+> Wrappers `Lupa.tsx`, `CloudX.tsx`, `NightCity.tsx`, `Rinacita.tsx`, `Dashboard.tsx` migrados a clases Tailwind. El `<style>` JSX de Rinacita (media queries) movido a `index.css` bajo `── Rinacita responsive overrides ──`. `useNightCityStyles` se mantiene (es CSS dinámico computado).
 La convención del proyecto manda Tailwind primero (`memory/project_conventions.md`). Hay islas de inline styles:
 - `src/pages/demo-3/lupa.tsx:54-84` — Link styling con objeto `style`.
 - `src/pages/demo-1/CloudX.tsx:48-53`.
@@ -247,7 +251,8 @@ La convención del proyecto manda Tailwind primero (`memory/project_conventions.
 
 **Acción**: pasar a clases Tailwind o, cuando sea CSS pesado y compartido, mover a `index.css` (ya existe el patrón de bloques `── BounceCards ──`, `── Masonry ──`, etc.).
 
-### ⏳ 🟡 5.2 `GlobalStyles.tsx` por demo es inconsistente
+### ✅ 🟡 5.2 `GlobalStyles.tsx` por demo es inconsistente
+> Estrategia única: `index.css` con bloques por demo. `GlobalStyles.tsx` de demo-1 y demo-3 eliminados; sus estilos viven en `── CloudX (demo-1) ──` y `── Lupa (demo-3) ──`. Demo-2 ya estaba en index.css. Demo-4 mantiene `useNightCityStyles` (CSS computado, no estático).
 Demo-1 y demo-3 tienen su propio componente `GlobalStyles.tsx`. Demo-2/4/5/6 no. Decidir un único patrón:
 - Opción A: `index.css` global con secciones por demo (escalable, ya empezado).
 - Opción B: archivo `.module.css` por demo en `pages/demo-N/styles.module.css`.

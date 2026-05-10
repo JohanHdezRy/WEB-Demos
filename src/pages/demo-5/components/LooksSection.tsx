@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 import { LOOKS } from "../data/fashionData";
 
@@ -7,13 +7,12 @@ export function LooksSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useGSAP(() => {
     const section = sectionRef.current;
     const track = trackRef.current;
     if (!section || !track) return;
 
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
       const totalWidth = track.scrollWidth - window.innerWidth;
       gsap.to(track, {
         x: -totalWidth,
@@ -28,8 +27,7 @@ export function LooksSection() {
         },
       });
     });
-    return () => mm.revert();
-  }, []);
+  }, { scope: sectionRef });
 
   return (
     <section ref={sectionRef} className="bg-stone-900 overflow-hidden">

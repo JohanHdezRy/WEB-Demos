@@ -1,18 +1,19 @@
 import type { Contact } from "../types";
 
+// Values resolve from .theme-noc CSS variables in src/index.css.
 export const S = {
-  bg: "#0D1117",
-  surface: "#161B22",
-  surface2: "#1C2128",
-  border: "#21262D",
-  green: "#3FB950",
-  blue: "#58A6FF",
-  orange: "#F0883E",
-  red: "#F85149",
-  purple: "#D2A8FF",
-  yellow: "#E3B341",
-  text: "#E6EDF3",
-  muted: "#8B949E",
+  bg:       "var(--noc-bg)",
+  surface:  "var(--noc-surface)",
+  surface2: "var(--noc-surface2)",
+  border:   "var(--noc-border)",
+  green:    "var(--noc-green)",
+  blue:     "var(--noc-blue)",
+  orange:   "var(--noc-orange)",
+  red:      "var(--noc-red)",
+  purple:   "var(--noc-purple)",
+  yellow:   "var(--noc-yellow)",
+  text:     "var(--noc-text)",
+  muted:    "var(--noc-muted)",
 };
 
 export const STATUS_COLOR: Record<Contact["status"], string> = {

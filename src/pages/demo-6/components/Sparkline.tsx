@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { S } from "../data/tokens";
 
 interface SparklineProps {
@@ -18,10 +18,9 @@ export function Sparkline({ color = S.green }: SparklineProps) {
     )
     .join(" ");
 
-  useEffect(() => {
+  useGSAP(() => {
     if (!ref.current) return;
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
       const len = ref.current!.getTotalLength();
       gsap.fromTo(
         ref.current,
@@ -29,8 +28,7 @@ export function Sparkline({ color = S.green }: SparklineProps) {
         { strokeDashoffset: 0, duration: 1.5, delay: 0.8, ease: "power2.out" },
       );
     });
-    return () => mm.revert();
-  }, []);
+  }, {});
 
   return (
     <svg width="100" height="40" viewBox={`0 0 ${w} ${h}`}>

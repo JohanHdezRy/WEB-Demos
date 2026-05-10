@@ -1,10 +1,11 @@
 import type { ColorTokens } from "../types";
 
+// Values resolve from .theme-rinacita CSS variables in src/index.css.
 export const C: ColorTokens = {
-  bg: "#f7f4ef",
-  dark: "#1c1a16",
-  gold: "#b89a6a",
-  muted: "rgba(28,26,22,0.7)",
-  muted2: "rgba(28,26,22,0.5)",
-  border: "rgba(28,26,22,0.1)",
+  bg:     "var(--ri-bg)",
+  dark:   "var(--ri-dark)",
+  gold:   "var(--ri-gold)",
+  muted:  "var(--ri-muted)",
+  muted2: "var(--ri-muted2)",
+  border: "var(--ri-border)",
 };

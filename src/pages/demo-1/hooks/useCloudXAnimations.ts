@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import type { RefObject } from "react";
-import { gsap, ScrollTrigger, SplitText } from "@/lib/gsap";
+import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
 
 interface HeroRefs {
   heroOverlayRef: RefObject<HTMLDivElement | null>;
@@ -19,9 +18,8 @@ export function useHeroAnimation({
   bottomBarRef,
   videoRef,
 }: HeroRefs) {
-  useEffect(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+  useGSAP(() => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       tl.from(heroOverlayRef.current, {
@@ -69,8 +67,7 @@ export function useHeroAnimation({
         }
       });
     });
-    return () => mm.revert();
-  }, []);
+  }, {});
 }
 
 interface ScrollRefs {
@@ -80,9 +77,8 @@ interface ScrollRefs {
 }
 
 export function useScrollAnimations({ navRef, manifRef, pageRef }: ScrollRefs) {
-  useEffect(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
+  useGSAP(() => {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
       ScrollTrigger.create({
         start: "top -60",
         onEnter: () =>
@@ -129,6 +125,5 @@ export function useScrollAnimations({ navRef, manifRef, pageRef }: ScrollRefs) {
         });
       });
     });
-    return () => mm.revert();
-  }, []);
+  }, { scope: pageRef });
 }
