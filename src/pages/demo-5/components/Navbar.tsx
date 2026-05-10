@@ -8,11 +8,15 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    gsap.fromTo(
-      navRef.current,
-      { y: -80, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.3 },
-    );
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(
+        navRef.current,
+        { y: -80, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.3 },
+      );
+    });
+    return () => mm.revert();
   }, []);
 
   return (

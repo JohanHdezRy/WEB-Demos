@@ -19,14 +19,17 @@ export function Sparkline({ color = S.green }: SparklineProps) {
     .join(" ");
 
   useEffect(() => {
-    if (ref.current) {
-      const len = ref.current.getTotalLength();
+    if (!ref.current) return;
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const len = ref.current!.getTotalLength();
       gsap.fromTo(
         ref.current,
         { strokeDashoffset: len, strokeDasharray: len },
         { strokeDashoffset: 0, duration: 1.5, delay: 0.8, ease: "power2.out" },
       );
-    }
+    });
+    return () => mm.revert();
   }, []);
 
   return (

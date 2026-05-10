@@ -33,7 +33,8 @@ export default function BounceCards({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(containerRef);
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.fromTo(
         ".card",
         { scale: 0 },
@@ -44,8 +45,8 @@ export default function BounceCards({
           delay: animationDelay,
         },
       );
-    }, containerRef);
-    return () => ctx.revert();
+    });
+    return () => mm.revert();
   }, [animationDelay, animationStagger, easeType]);
 
   const getNoRotationTransform = (t: string) =>
@@ -126,7 +127,11 @@ export default function BounceCards({
           <img
             className="w-full h-full object-cover"
             src={src}
-            alt={`card-${idx}`}
+            alt=""
+            width={200}
+            height={200}
+            loading="lazy"
+            decoding="async"
           />
         </div>
       ))}

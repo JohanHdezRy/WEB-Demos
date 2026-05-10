@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useLenis } from "../../hooks/useLenis";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { T } from "./data/tokens";
 import {
   useHeroAnimation,
@@ -28,8 +29,10 @@ export function CloudX() {
   const bottomBarRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const manifRef = useRef<HTMLElement>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  useDocumentTitle("CloudX · Cloud SaaS", "en");
   useLenis();
 
   useHeroAnimation({
@@ -41,10 +44,11 @@ export function CloudX() {
     videoRef,
   });
 
-  useScrollAnimations({ navRef, manifRef });
+  useScrollAnimations({ navRef, manifRef, pageRef });
 
   return (
     <div
+      ref={pageRef}
       style={{
         background: T.bg,
         color: T.text,

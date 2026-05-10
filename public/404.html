@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEB Demos · Redirecting…</title>
+    <script>
+      // SPA fallback for GitHub Pages: rewrite the path into a query string so
+      // that index.html can read it on load and replace history with the real
+      // URL. Reference: https://github.com/rafgraph/spa-github-pages
+      (function () {
+        var segmentCount = 1; // /WEB-Demos/ is segment 1
+        var l = window.location;
+        l.replace(
+          l.protocol +
+            "//" +
+            l.hostname +
+            (l.port ? ":" + l.port : "") +
+            l.pathname
+              .split("/")
+              .slice(0, 1 + segmentCount)
+              .join("/") +
+            "/?p=/" +
+            l.pathname.split("/").slice(1 + segmentCount).join("/").replace(/&/g, "~and~") +
+            (l.search ? "&q=" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+            l.hash
+        );
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

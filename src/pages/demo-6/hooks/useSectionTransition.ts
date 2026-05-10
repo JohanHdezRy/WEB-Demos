@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { gsap } from "gsap";
+import { prefersReducedMotion } from "../../../hooks/useReducedMotion";
 import type { Section, SettingsSection } from "../types";
 
 export function useSectionTransition() {
@@ -9,6 +10,11 @@ export function useSectionTransition() {
 
   const changeSection = (sec: Section) => {
     if (!mainRef.current || sec === activeSection) return;
+    if (prefersReducedMotion()) {
+      setActiveSection(sec);
+      setActiveSettings(null);
+      return;
+    }
     gsap.to(mainRef.current, {
       opacity: 0,
       y: 8,
@@ -29,6 +35,10 @@ export function useSectionTransition() {
 
   const changeSettingsSection = (sec: SettingsSection) => {
     if (!mainRef.current) return;
+    if (prefersReducedMotion()) {
+      setActiveSettings(sec);
+      return;
+    }
     gsap.to(mainRef.current, {
       opacity: 0,
       y: 8,

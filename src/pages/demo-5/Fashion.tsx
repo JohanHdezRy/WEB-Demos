@@ -1,3 +1,4 @@
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { Navbar } from "./components/Navbar";
 import { HeroSection } from "./components/HeroSection";
 import { ProductGrid } from "./components/ProductGrid";
@@ -9,6 +10,7 @@ import { MagazineSection } from "./components/MagazineSection";
 import { Footer } from "./components/Footer";
 
 export function Fashion() {
+  useDocumentTitle("Maison · Fashion", "fr");
   return (
     <div className="bg-white">
       <style>{`

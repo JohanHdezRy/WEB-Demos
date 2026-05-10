@@ -1,12 +1,12 @@
 import { type RefObject } from "react";
 import { C } from "../data/tokens";
 
-interface RinacitaStoryProps {
+interface StoryProps {
   storyRef: RefObject<HTMLElement | null>;
   storyVidRef: RefObject<HTMLVideoElement | null>;
 }
 
-export function RinacitaStory({ storyRef, storyVidRef }: RinacitaStoryProps) {
+export function Story({ storyRef, storyVidRef }: StoryProps) {
   return (
     <section
       ref={storyRef}
@@ -27,6 +27,9 @@ export function RinacitaStory({ storyRef, storyVidRef }: RinacitaStoryProps) {
           muted
           loop
           playsInline
+          preload="metadata"
+          width={1920}
+          height={1080}
           style={{
             width: "100%",
             height: "110%",

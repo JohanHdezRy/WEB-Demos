@@ -33,7 +33,11 @@ export function MenuCard({ card, idx }: MenuCardProps) {
 
       <img
         src={card.images[current]}
-        alt={card.label}
+        alt=""
+        width={1200}
+        height={800}
+        loading="lazy"
+        decoding="async"
         style={{
           position: "absolute",
           inset: 0,
@@ -50,7 +54,11 @@ export function MenuCard({ card, idx }: MenuCardProps) {
       {incoming !== null && (
         <img
           src={card.images[incoming]}
-          alt={card.label}
+          alt=""
+          width={1200}
+          height={800}
+          loading="lazy"
+          decoding="async"
           style={{
             position: "absolute",
             inset: 0,

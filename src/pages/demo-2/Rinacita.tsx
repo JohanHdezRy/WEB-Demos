@@ -1,16 +1,17 @@
 import { useRef, useState } from "react";
 import { useLenis } from "../../hooks/useLenis";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { useRinacitaAnimations } from "./hooks/useRinacitaAnimations";
 import { C } from "./data/tokens";
-import { RinacitaNav } from "./components/RinacitaNav";
-import { RinacitaHero } from "./components/RinacitaHero";
-import { RinacitaIntro } from "./components/RinacitaIntro";
-import { RinacitaMenuSection } from "./components/RinacitaMenuSection";
-import { RinacitaStory } from "./components/RinacitaStory";
-import { RinacitaStats } from "./components/RinacitaStats";
-import { RinacitaGallery } from "./components/RinacitaGallery";
-import { RinacitaCta } from "./components/RinacitaCta";
-import { RinacitaFooter } from "./components/RinacitaFooter";
+import { Nav } from "./components/Nav";
+import { Hero } from "./components/Hero";
+import { Intro } from "./components/Intro";
+import { MenuSection } from "./components/MenuSection";
+import { Story } from "./components/Story";
+import { Stats } from "./components/Stats";
+import { Gallery } from "./components/Gallery";
+import { Cta } from "./components/Cta";
+import { Footer } from "./components/Footer";
 
 export function Rinacita() {
   const navRef = useRef<HTMLElement>(null);
@@ -23,8 +24,10 @@ export function Rinacita() {
   const storyRef = useRef<HTMLElement>(null);
   const storyVidRef = useRef<HTMLVideoElement>(null);
   const galleryRef = useRef<HTMLElement>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  useDocumentTitle("Rinacita · Trattoria Italiana", "es");
   useLenis();
   useRinacitaAnimations({
     navRef,
@@ -37,10 +40,12 @@ export function Rinacita() {
     storyRef,
     storyVidRef,
     galleryRef,
+    pageRef,
   });
 
   return (
     <div
+      ref={pageRef}
       style={{
         background: C.bg,
         color: C.dark,
@@ -48,24 +53,24 @@ export function Rinacita() {
         fontFamily: "system-ui,-apple-system,sans-serif",
       }}
     >
-      <RinacitaNav
+      <Nav
         navRef={navRef}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
       />
-      <RinacitaHero
+      <Hero
         heroVidRef={heroVidRef}
         heroTitleRef={heroTitleRef}
         heroTagRef={heroTagRef}
         heroCtaRef={heroCtaRef}
       />
-      <RinacitaIntro intrRef={intrRef} />
-      <RinacitaMenuSection menuRef={menuRef} />
-      <RinacitaStory storyRef={storyRef} storyVidRef={storyVidRef} />
-      <RinacitaStats />
-      <RinacitaGallery galleryRef={galleryRef} />
-      <RinacitaCta />
-      <RinacitaFooter />
+      <Intro intrRef={intrRef} />
+      <MenuSection menuRef={menuRef} />
+      <Story storyRef={storyRef} storyVidRef={storyVidRef} />
+      <Stats />
+      <Gallery galleryRef={galleryRef} />
+      <Cta />
+      <Footer />
 
       <style>{`
         @media (max-width: 768px) {

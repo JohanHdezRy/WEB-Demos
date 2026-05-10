@@ -63,7 +63,11 @@ export function LabSpecsSection({ specCanRef, specRef }: LabSpecsSectionProps) {
           />
           <img
             src={lupaCan}
-            alt="Lupa Energy Can"
+            alt=""
+            width={400}
+            height={685}
+            loading="lazy"
+            decoding="async"
             style={{
               position: "relative",
               zIndex: 1,

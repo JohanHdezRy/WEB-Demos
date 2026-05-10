@@ -182,6 +182,11 @@ export function HeroSection({
           <img
             src={lupaCan}
             alt="Red Wolf Energy Can"
+            width={420}
+            height={720}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             style={{
               position: "relative",
               zIndex: 1,

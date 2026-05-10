@@ -3,11 +3,11 @@ import { C } from "../data/tokens";
 import { MENU_CARDS } from "../data/menuData";
 import { MenuCard } from "./MenuCard";
 
-interface RinacitaMenuSectionProps {
+interface MenuSectionProps {
   menuRef: RefObject<HTMLElement | null>;
 }
 
-export function RinacitaMenuSection({ menuRef }: RinacitaMenuSectionProps) {
+export function MenuSection({ menuRef }: MenuSectionProps) {
   return (
     <section ref={menuRef} style={{ padding: "80px 48px" }}>
       <div

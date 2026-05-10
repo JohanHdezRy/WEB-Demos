@@ -39,7 +39,11 @@ export function AudienceCards() {
           <img
             className="card-img"
             src={card.img}
-            alt={card.eyebrow}
+            alt=""
+            width={1200}
+            height={800}
+            loading="lazy"
+            decoding="async"
             style={{
               position: "absolute",
               inset: 0,

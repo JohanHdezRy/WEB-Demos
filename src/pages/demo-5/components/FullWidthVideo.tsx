@@ -11,6 +11,9 @@ export function FullWidthVideo() {
         muted
         loop
         playsInline
+        preload="metadata"
+        width={1920}
+        height={1080}
       />
       <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
         <AnimatedContent threshold={0.3} distance={30}>

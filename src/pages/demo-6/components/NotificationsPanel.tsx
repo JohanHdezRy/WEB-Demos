@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { gsap } from "gsap";
+import { prefersReducedMotion } from "../../../hooks/useReducedMotion";
 import { S } from "../data/tokens";
 import { INIT_NOTIFICATIONS } from "../data/notificationsData";
 import type { Notification } from "../types";
@@ -11,6 +12,10 @@ export function NotificationsPanel() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const animateOut = useCallback((targets: Element[], onDone: () => void) => {
+    if (prefersReducedMotion()) {
+      onDone();
+      return;
+    }
     gsap.to(targets, {
       x: 60,
       opacity: 0,
@@ -26,6 +31,7 @@ export function NotificationsPanel() {
   }, []);
 
   const animateIn = useCallback((targets: Element[]) => {
+    if (prefersReducedMotion()) return;
     gsap.fromTo(
       targets,
       { x: 40, opacity: 0 },
@@ -49,6 +55,10 @@ export function NotificationsPanel() {
 
   const dismissOne = useCallback((id: number) => {
     if (!listRef.current) return;
+    if (prefersReducedMotion()) {
+      setItems((prev) => prev.filter((n) => n.id !== id));
+      return;
+    }
     const el = listRef.current.querySelector(`[data-notif="${id}"]`);
     if (!el) return;
     gsap.to(el, {

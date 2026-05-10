@@ -64,6 +64,10 @@ export function VinylRoulette() {
           <img
             src={ROULETTE[leftIdx].img}
             alt=""
+            width={260}
+            height={260}
+            loading="lazy"
+            decoding="async"
             style={{ width: "100%", aspectRatio: "1/1", objectFit: "cover" }}
           />
         </div>
@@ -87,6 +91,10 @@ export function VinylRoulette() {
             <img
               src={item.img}
               alt={item.title}
+              width={480}
+              height={480}
+              loading="lazy"
+              decoding="async"
               style={{
                 width: "100%",
                 height: "100%",
@@ -118,7 +126,11 @@ export function VinylRoulette() {
               padding: "0 1rem",
             }}
           >
-            <button className="nc-arrow-btn" onClick={prev}>
+            <button
+              className="nc-arrow-btn"
+              onClick={prev}
+              aria-label="Vinilo anterior"
+            >
               ←
             </button>
 
@@ -131,7 +143,11 @@ export function VinylRoulette() {
               ))}
             </div>
 
-            <button className="nc-arrow-btn" onClick={next}>
+            <button
+              className="nc-arrow-btn"
+              onClick={next}
+              aria-label="Vinilo siguiente"
+            >
               →
             </button>
           </div>
@@ -151,6 +167,10 @@ export function VinylRoulette() {
           <img
             src={ROULETTE[rightIdx].img}
             alt=""
+            width={260}
+            height={260}
+            loading="lazy"
+            decoding="async"
             style={{ width: "100%", aspectRatio: "1/1", objectFit: "cover" }}
           />
         </div>

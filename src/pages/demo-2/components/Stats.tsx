@@ -1,7 +1,7 @@
 import { C } from "../data/tokens";
 import { STATS } from "../data/statsData";
 
-export function RinacitaStats() {
+export function Stats() {
   return (
     <section
       className="ri-stats-grid"

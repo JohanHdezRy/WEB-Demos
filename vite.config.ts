@@ -11,4 +11,15 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          gsap: ['gsap', 'gsap/ScrollTrigger', 'gsap/SplitText'],
+          three: ['three'],
+          glmatrix: ['gl-matrix'],
+        },
+      },
+    },
+  },
 })

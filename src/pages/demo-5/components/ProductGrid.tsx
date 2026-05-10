@@ -27,11 +27,18 @@ export function ProductGrid() {
                 <img
                   src={p.src}
                   alt={p.label}
+                  width={600}
+                  height={900}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                  <button className="w-full bg-white text-stone-800 text-xs tracking-[0.2em] uppercase py-3 hover:bg-stone-800 hover:text-white transition-colors duration-300">
+                  <button
+                    aria-label={`Añadir ${p.label} al carrito`}
+                    className="w-full bg-white text-stone-800 text-xs tracking-[0.2em] uppercase py-3 hover:bg-stone-800 hover:text-white transition-colors duration-300"
+                  >
                     Quick Add
                   </button>
                 </div>

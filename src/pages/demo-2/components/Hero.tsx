@@ -1,19 +1,19 @@
 import { type RefObject } from "react";
 import { C } from "../data/tokens";
 
-interface RinacitaHeroProps {
+interface HeroProps {
   heroVidRef: RefObject<HTMLVideoElement | null>;
   heroTitleRef: RefObject<HTMLHeadingElement | null>;
   heroTagRef: RefObject<HTMLParagraphElement | null>;
   heroCtaRef: RefObject<HTMLDivElement | null>;
 }
 
-export function RinacitaHero({
+export function Hero({
   heroVidRef,
   heroTitleRef,
   heroTagRef,
   heroCtaRef,
-}: RinacitaHeroProps) {
+}: HeroProps) {
   return (
     <div
       style={{
@@ -31,6 +31,9 @@ export function RinacitaHero({
         muted
         loop
         playsInline
+        preload="metadata"
+        width={2732}
+        height={1440}
         style={{
           position: "absolute",
           inset: 0,

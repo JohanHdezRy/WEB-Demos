@@ -1,7 +1,7 @@
 import { C } from "../data/tokens";
 import { FOOTER_COLUMNS, SOCIAL_LINKS, LEGAL_LINKS } from "../data/footerData";
 
-export function RinacitaFooter() {
+export function Footer() {
   return (
     <>
       <footer

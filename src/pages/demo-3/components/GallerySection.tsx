@@ -52,8 +52,12 @@ export function GallerySection({ galleryRef }: GallerySectionProps) {
             </p>
           </div>
           <div style={{ display: "flex", gap: "0.5rem" }}>
-            <button className="gal-arrow">&#8592;</button>
-            <button className="gal-arrow">&#8594;</button>
+            <button className="gal-arrow" aria-label="Imagen anterior">
+              &#8592;
+            </button>
+            <button className="gal-arrow" aria-label="Imagen siguiente">
+              &#8594;
+            </button>
           </div>
         </div>
       </div>
@@ -79,7 +83,14 @@ export function GallerySection({ galleryRef }: GallerySectionProps) {
             style={{ height: "100%", borderRadius: 0 }}
           >
             <div className="bento-overlay" />
-            <img src={item.src} alt={item.label} />
+            <img
+              src={item.src}
+              alt=""
+              width={800}
+              height={1000}
+              loading="lazy"
+              decoding="async"
+            />
             <span
               className="bento-tag he-body"
               style={{

@@ -1,9 +1,6 @@
 import { useEffect, type RefObject } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { GALLERY } from "../data/galleryData";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface UseLupaAnimationsParams {
   navRef: RefObject<HTMLElement | null>;
@@ -31,7 +28,8 @@ export function useLupaAnimations({
   ctaRef,
 }: UseLupaAnimationsParams) {
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
       tl.from(heroTagRef.current, { opacity: 0, y: 16, duration: 0.7 }, 0.3)
         .from(heroH1Ref.current, { opacity: 0, y: 60, duration: 1.1 }, 0.5)
@@ -122,9 +120,6 @@ export function useLupaAnimations({
       };
     });
 
-    return () => {
-      ctx.revert();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
+    return () => mm.revert();
   }, []);
 }

@@ -121,7 +121,8 @@ export function CustomersSection() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(ref);
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.from(".metric-card", {
         y: 18,
         opacity: 0,
@@ -137,8 +138,8 @@ export function CustomersSection() {
         delay: 0.2,
         ease: "power2.out",
       });
-    }, ref);
-    return () => ctx.revert();
+    });
+    return () => mm.revert();
   }, []);
 
   const filtered = customers.filter(

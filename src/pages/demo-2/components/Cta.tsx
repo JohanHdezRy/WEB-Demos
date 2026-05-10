@@ -1,6 +1,6 @@
 import { C } from "../data/tokens";
 
-export function RinacitaCta() {
+export function Cta() {
   return (
     <section
       style={{

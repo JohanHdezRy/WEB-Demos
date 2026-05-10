@@ -23,7 +23,8 @@ export function Sidebar({
   const sidebarRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(sidebarRef);
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.from(".nav-item", {
         x: -16,
         opacity: 0,
@@ -32,8 +33,8 @@ export function Sidebar({
         ease: "power2.out",
         delay: 0.1,
       });
-    }, sidebarRef);
-    return () => ctx.revert();
+    });
+    return () => mm.revert();
   }, []);
 
   return (

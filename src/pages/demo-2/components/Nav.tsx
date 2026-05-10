@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 import { C } from "../data/tokens";
 import { NAV_LINKS } from "../data/footerData";
 
-interface RinacitaNavProps {
+interface NavProps {
   navRef: RefObject<HTMLElement | null>;
   menuOpen: boolean;
   setMenuOpen: (v: boolean | ((prev: boolean) => boolean)) => void;
 }
 
-export function RinacitaNav({
+export function Nav({
   navRef,
   menuOpen,
   setMenuOpen,
-}: RinacitaNavProps) {
+}: NavProps) {
   return (
     <>
       <nav

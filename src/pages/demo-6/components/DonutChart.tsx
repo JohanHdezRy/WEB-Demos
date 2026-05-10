@@ -21,7 +21,12 @@ export function DonutChart({
   const ref = useRef<SVGCircleElement>(null);
 
   useEffect(() => {
-    if (ref.current) {
+    if (!ref.current) return;
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      gsap.set(ref.current, { strokeDashoffset: circ - dash });
+    });
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.fromTo(
         ref.current,
         { strokeDashoffset: circ },
@@ -32,7 +37,8 @@ export function DonutChart({
           ease: "power2.out",
         },
       );
-    }
+    });
+    return () => mm.revert();
   }, [circ, dash]);
 
   return (

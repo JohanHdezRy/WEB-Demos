@@ -3,8 +3,8 @@ import type { DesignTokens } from "../types";
 export const T: DesignTokens = {
   bg: "#09090b",
   text: "#f5f5f0",
-  muted: "rgba(245,245,240,0.45)",
-  muted2: "rgba(245,245,240,0.22)",
+  muted: "rgba(245,245,240,0.7)",
+  muted2: "rgba(245,245,240,0.45)",
   border: "rgba(255,255,255,0.08)",
   borderHi: "rgba(255,255,255,0.18)",
   surface: "#202020",

@@ -1,8 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap } from "@/lib/gsap";
 
 interface AnimatedContentProps {
   children: ReactNode;
@@ -42,7 +39,8 @@ export default function AnimatedContent({
     const axis = direction === "horizontal" ? "x" : "y";
     const offset = reverse ? -distance : distance;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.fromTo(
         el,
         {
@@ -66,7 +64,7 @@ export default function AnimatedContent({
       );
     });
 
-    return () => ctx.revert();
+    return () => mm.revert();
   }, [
     distance,
     direction,

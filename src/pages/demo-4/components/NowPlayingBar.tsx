@@ -33,6 +33,10 @@ export function NowPlayingBar() {
           <img
             src={vinil3}
             alt=""
+            width={48}
+            height={48}
+            loading="lazy"
+            decoding="async"
             style={{
               width: "100%",
               height: "100%",
@@ -80,14 +84,22 @@ export function NowPlayingBar() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-          {(["⇄", "⏮", null, "⏭", "↻"] as (string | null)[]).map((icon, i) =>
-            icon === null ? (
-              <button key={i} className="nc-play-btn">
+          {(
+            [
+              { icon: "⇄", label: "Aleatorio" },
+              { icon: "⏮", label: "Pista anterior" },
+              { icon: null, label: "Reproducir" },
+              { icon: "⏭", label: "Pista siguiente" },
+              { icon: "↻", label: "Repetir" },
+            ] as { icon: string | null; label: string }[]
+          ).map((b, i) =>
+            b.icon === null ? (
+              <button key={i} className="nc-play-btn" aria-label={b.label}>
                 ▶
               </button>
             ) : (
-              <button key={i} className="nc-ctrl-btn">
-                {icon}
+              <button key={i} className="nc-ctrl-btn" aria-label={b.label}>
+                {b.icon}
               </button>
             ),
           )}
@@ -124,9 +136,13 @@ export function NowPlayingBar() {
           width: "33%",
         }}
       >
-        {["🔊", "🎵", "⛶"].map((icon) => (
-          <button key={icon} className="nc-ctrl-btn">
-            {icon}
+        {[
+          { icon: "🔊", label: "Volumen" },
+          { icon: "🎵", label: "Cola de reproducción" },
+          { icon: "⛶", label: "Pantalla completa" },
+        ].map((b) => (
+          <button key={b.icon} className="nc-ctrl-btn" aria-label={b.label}>
+            {b.icon}
           </button>
         ))}
       </div>

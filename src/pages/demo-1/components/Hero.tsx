@@ -36,6 +36,9 @@ export function Hero({
         muted
         loop
         playsInline
+        preload="metadata"
+        width={1920}
+        height={1080}
         style={{
           position: "absolute",
           inset: 0,

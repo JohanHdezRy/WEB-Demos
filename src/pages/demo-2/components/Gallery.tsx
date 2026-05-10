@@ -3,11 +3,11 @@ import Masonry from "../../../components/animations/Masonry";
 import { C } from "../data/tokens";
 import { GALLERY } from "../data/galleryData";
 
-interface RinacitaGalleryProps {
+interface GalleryProps {
   galleryRef: RefObject<HTMLElement | null>;
 }
 
-export function RinacitaGallery({ galleryRef }: RinacitaGalleryProps) {
+export function Gallery({ galleryRef }: GalleryProps) {
   return (
     <section
       ref={galleryRef}

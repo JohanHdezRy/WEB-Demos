@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useFonts } from "../../hooks/useFonts";
 import { useLenis } from "../../hooks/useLenis";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { FONTS_HREF, T } from "./data/tokens";
 import { useLupaAnimations } from "./hooks/useLupaAnimations";
 import { GlobalStyles } from "./components/GlobalStyles";
@@ -26,6 +27,7 @@ export function Lupa() {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
+  useDocumentTitle("Red Wolf · Energy Drink", "en");
   useFonts(FONTS_HREF);
   useLenis({ lerp: 0.08 });
   useLupaAnimations({

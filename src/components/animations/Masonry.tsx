@@ -8,6 +8,7 @@ import React, {
 import { gsap } from "gsap";
 import { useMedia } from "../../hooks/useMedia";
 import { useMeasure } from "../../hooks/useMeasure";
+import { prefersReducedMotion } from "../../hooks/useReducedMotion";
 
 const preloadImages = async (urls: string[]): Promise<void> => {
   await Promise.all(
@@ -130,10 +131,15 @@ const Masonry: React.FC<MasonryProps> = ({
 
   useLayoutEffect(() => {
     if (!imagesReady) return;
+    const reduced = prefersReducedMotion();
     grid.forEach((item, index) => {
       const selector = `[data-key="${item.id}"]`;
       const target = { x: item.x, y: item.y, width: item.w, height: item.h };
       if (!hasMounted.current) {
+        if (reduced) {
+          gsap.set(selector, { opacity: 1, ...target });
+          return;
+        }
         const init = getInitialPosition(item);
         gsap.fromTo(
           selector,
@@ -155,7 +161,12 @@ const Masonry: React.FC<MasonryProps> = ({
           },
         );
       } else {
-        gsap.to(selector, { ...target, duration, ease, overwrite: "auto" });
+        gsap.to(selector, {
+          ...target,
+          duration: reduced ? 0 : duration,
+          ease,
+          overwrite: "auto",
+        });
       }
     });
     hasMounted.current = true;

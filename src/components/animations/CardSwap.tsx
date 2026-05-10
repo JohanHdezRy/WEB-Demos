@@ -11,6 +11,7 @@ import React, {
   useRef,
 } from "react";
 import gsap from "gsap";
+import { prefersReducedMotion } from "../../hooks/useReducedMotion";
 
 export interface CardSwapProps {
   width?: number | string;
@@ -185,6 +186,10 @@ const CardSwap: React.FC<CardSwapProps> = ({
         order.current = [...rest, front];
       });
     };
+
+    if (prefersReducedMotion()) {
+      return;
+    }
 
     swap();
     intervalRef.current = window.setInterval(swap, delay);

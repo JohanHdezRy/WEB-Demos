@@ -1,9 +1,5 @@
 import { useEffect, type RefObject } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
-
-gsap.registerPlugin(ScrollTrigger, SplitText);
+import { gsap, ScrollTrigger, SplitText } from "@/lib/gsap";
 
 interface AnimationRefs {
   navRef: RefObject<HTMLElement | null>;
@@ -16,6 +12,7 @@ interface AnimationRefs {
   storyRef: RefObject<HTMLElement | null>;
   storyVidRef: RefObject<HTMLVideoElement | null>;
   galleryRef: RefObject<HTMLElement | null>;
+  pageRef: RefObject<HTMLDivElement | null>;
 }
 
 export function useRinacitaAnimations({
@@ -29,9 +26,11 @@ export function useRinacitaAnimations({
   storyRef,
   storyVidRef,
   galleryRef,
+  pageRef,
 }: AnimationRefs) {
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.call(() => {
         if (heroVidRef.current)
@@ -60,11 +59,12 @@ export function useRinacitaAnimations({
       tl.from(heroTagRef.current, { opacity: 0, y: 16, duration: 0.8 }, "-=0.4");
       tl.from(heroCtaRef.current, { opacity: 0, y: 16, duration: 0.6 }, "-=0.5");
     });
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       ScrollTrigger.create({
         start: "top -60",
         onEnter: () =>
@@ -127,16 +127,18 @@ export function useRinacitaAnimations({
         });
       }
 
-      gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => {
-        gsap.from(el, {
-          opacity: 0,
-          y: 32,
-          duration: 0.9,
-          ease: "power2.out",
-          scrollTrigger: { trigger: el, start: "top 82%" },
+      gsap.utils
+        .toArray<HTMLElement>(".reveal", pageRef.current ?? undefined)
+        .forEach((el) => {
+          gsap.from(el, {
+            opacity: 0,
+            y: 32,
+            duration: 0.9,
+            ease: "power2.out",
+            scrollTrigger: { trigger: el, start: "top 82%" },
+          });
         });
-      });
     });
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 }

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useInView } from "../hooks/useInView";
-import cover1 from "../styles/img/demo1.png";
-import cover2 from "../styles/img/demo2.png";
-import cover3 from "../styles/img/demo3.png";
-import cover4 from "../styles/img/demo4.png";
-import cover5 from "../styles/img/demo5.png";
-import cover6 from "../styles/img/demo6.png";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import cover1 from "../styles/img/demo1.webp";
+import cover2 from "../styles/img/demo2.webp";
+import cover3 from "../styles/img/demo3.webp";
+import cover4 from "../styles/img/demo4.webp";
+import cover5 from "../styles/img/demo5.webp";
+import cover6 from "../styles/img/demo6.webp";
 
 const demos = [
   {
@@ -115,6 +116,11 @@ function Card({ demo, index }: { demo: (typeof demos)[0]; index: number }) {
           <img
             src={demo.screenshot}
             alt={`${demo.name} preview`}
+            width={800}
+            height={450}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            fetchPriority={index === 0 ? "high" : "auto"}
             style={{
               width: "100%",
               height: "100%",
@@ -257,6 +263,7 @@ function Card({ demo, index }: { demo: (typeof demos)[0]; index: number }) {
 }
 
 export function Landing() {
+  useDocumentTitle("WEB Demos · JohanHdezRy", "es");
   return (
     <div style={{ background: "#0e0e0e", minHeight: "100vh" }}>
       {/* Hero */}

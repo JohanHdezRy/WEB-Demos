@@ -38,6 +38,9 @@ export function Manifesto() {
             muted
             loop
             playsInline
+            preload="metadata"
+            width={800}
+            height={1000}
             src="https://cdn.pixabay.com/video/2025/03/18/265815_large.mp4"
             style={{
               width: "100%",

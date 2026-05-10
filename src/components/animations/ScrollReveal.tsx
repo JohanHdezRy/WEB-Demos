@@ -1,8 +1,5 @@
 import { useEffect, useRef, type ElementType, type ReactNode } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap } from "@/lib/gsap";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -40,7 +37,8 @@ export default function ScrollReveal({
 
     const words = el.querySelectorAll<HTMLElement>(".word");
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       words.forEach((word) => {
         gsap.fromTo(
           word,
@@ -67,7 +65,7 @@ export default function ScrollReveal({
       });
     });
 
-    return () => ctx.revert();
+    return () => mm.revert();
   }, [
     baseOpacity,
     baseRotation,

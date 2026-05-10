@@ -47,6 +47,9 @@ export function ReelSection() {
           muted
           loop
           playsInline
+          preload="metadata"
+          width={1920}
+          height={1080}
           style={{
             width: "100%",
             display: "block",

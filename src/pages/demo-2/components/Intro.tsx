@@ -7,11 +7,11 @@ const INTRO_LINES = [
   "La cocina italiana no es una técnica. Es una conversación con la memoria.",
 ];
 
-interface RinacitaIntroProps {
+interface IntroProps {
   intrRef: RefObject<HTMLElement | null>;
 }
 
-export function RinacitaIntro({ intrRef }: RinacitaIntroProps) {
+export function Intro({ intrRef }: IntroProps) {
   return (
     <section
       ref={intrRef}

@@ -1,10 +1,6 @@
 import { useEffect } from "react";
 import type { RefObject } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
-
-gsap.registerPlugin(ScrollTrigger, SplitText);
+import { gsap, ScrollTrigger, SplitText } from "@/lib/gsap";
 
 interface HeroRefs {
   heroOverlayRef: RefObject<HTMLDivElement | null>;
@@ -24,7 +20,8 @@ export function useHeroAnimation({
   videoRef,
 }: HeroRefs) {
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       tl.from(heroOverlayRef.current, {
@@ -72,18 +69,20 @@ export function useHeroAnimation({
         }
       });
     });
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 }
 
 interface ScrollRefs {
   navRef: RefObject<HTMLElement | null>;
   manifRef: RefObject<HTMLElement | null>;
+  pageRef: RefObject<HTMLDivElement | null>;
 }
 
-export function useScrollAnimations({ navRef, manifRef }: ScrollRefs) {
+export function useScrollAnimations({ navRef, manifRef, pageRef }: ScrollRefs) {
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       ScrollTrigger.create({
         start: "top -60",
         onEnter: () =>
@@ -111,7 +110,8 @@ export function useScrollAnimations({ navRef, manifRef }: ScrollRefs) {
         });
       }
 
-      gsap.utils.toArray<HTMLElement>(".reveal-up").forEach((el) => {
+      const scope = pageRef.current ?? undefined;
+      gsap.utils.toArray<HTMLElement>(".reveal-up", scope).forEach((el) => {
         gsap.from(el, {
           opacity: 0,
           y: 40,
@@ -121,7 +121,7 @@ export function useScrollAnimations({ navRef, manifRef }: ScrollRefs) {
         });
       });
 
-      gsap.utils.toArray<HTMLElement>(".feat-img").forEach((img) => {
+      gsap.utils.toArray<HTMLElement>(".feat-img", scope).forEach((img) => {
         gsap.to(img, {
           yPercent: -10,
           ease: "none",
@@ -129,6 +129,6 @@ export function useScrollAnimations({ navRef, manifRef }: ScrollRefs) {
         });
       });
     });
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 }

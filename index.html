@@ -8,9 +8,40 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;600&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;600&display=swap"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;600&display=swap"
+      />
+    </noscript>
+    <script>
+      // SPA fallback redirect from /WEB-Demos/?p=/ruta&q=foo — pareja de public/404.html
+      (function () {
+        var l = window.location;
+        if (l.search.indexOf("?p=/") !== -1) {
+          var params = l.search.slice(1).split("&");
+          var route = "";
+          var rest = [];
+          params.forEach(function (kv) {
+            if (kv.indexOf("p=") === 0) route = decodeURIComponent(kv.slice(2)).replace(/~and~/g, "&");
+            else if (kv.indexOf("q=") === 0) rest.push(decodeURIComponent(kv.slice(2)).replace(/~and~/g, "&"));
+            else rest.push(kv);
+          });
+          var q = rest.length ? "?" + rest.join("&") : "";
+          window.history.replaceState(null, "", l.pathname + route.replace(/^\//, "") + q + l.hash);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

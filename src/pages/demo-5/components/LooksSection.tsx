@@ -1,10 +1,7 @@
 import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 import { LOOKS } from "../data/fashionData";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export function LooksSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -15,9 +12,9 @@ export function LooksSection() {
     const track = trackRef.current;
     if (!section || !track) return;
 
-    const totalWidth = track.scrollWidth - window.innerWidth;
-
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const totalWidth = track.scrollWidth - window.innerWidth;
       gsap.to(track, {
         x: -totalWidth,
         ease: "none",
@@ -31,7 +28,7 @@ export function LooksSection() {
         },
       });
     });
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 
   return (
@@ -65,6 +62,10 @@ export function LooksSection() {
               <img
                 src={look.src}
                 alt={look.label}
+                width={700}
+                height={1000}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

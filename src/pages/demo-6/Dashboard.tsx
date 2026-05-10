@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { S } from "./data/tokens";
 import { SETTINGS_ITEMS } from "./data/navData";
 import { useSectionTransition } from "./hooks/useSectionTransition";
@@ -13,6 +14,7 @@ import { PlaceholderSection } from "./components/PlaceholderSection";
 import type { Section, SettingsSection } from "./types";
 
 export function Dashboard() {
+  useDocumentTitle("DWIS·M · Analytics Dashboard", "en");
   const {
     activeSection,
     activeSettings,

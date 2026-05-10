@@ -9,6 +9,10 @@ function FolderCell({ folder }: { folder: FolderItem }) {
       key={i}
       src={src}
       alt=""
+      width={200}
+      height={200}
+      loading="lazy"
+      decoding="async"
       style={{
         width: "100%",
         height: "100%",

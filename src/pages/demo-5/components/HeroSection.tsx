@@ -6,7 +6,8 @@ export function HeroSection() {
   const titleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(titleRef);
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.fromTo(
         ".hero-line",
         { yPercent: 110 },
@@ -18,8 +19,8 @@ export function HeroSection() {
           delay: 0.8,
         },
       );
-    }, titleRef);
-    return () => ctx.revert();
+    });
+    return () => mm.revert();
   }, []);
 
   return (
@@ -31,6 +32,9 @@ export function HeroSection() {
         muted
         loop
         playsInline
+        preload="metadata"
+        width={1920}
+        height={1080}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
 

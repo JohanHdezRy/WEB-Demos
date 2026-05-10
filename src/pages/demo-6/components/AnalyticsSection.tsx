@@ -93,7 +93,8 @@ export function AnalyticsSection() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(ref);
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.from(".metric-card", {
         y: 18,
         opacity: 0,
@@ -109,8 +110,8 @@ export function AnalyticsSection() {
         delay: 0.2,
         ease: "power2.out",
       });
-    }, ref);
-    return () => ctx.revert();
+    });
+    return () => mm.revert();
   }, []);
 
   return (

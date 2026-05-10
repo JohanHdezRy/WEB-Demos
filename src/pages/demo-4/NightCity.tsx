@@ -1,5 +1,6 @@
 import FloatingLines from "../../components/animations/FloatingLines";
 import { useFonts } from "../../hooks/useFonts";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { C, FONTS_HREF } from "./data/tokens";
 import { useNightCityStyles } from "./hooks/useNightCityStyles";
 import { NavBar } from "./components/NavBar";
@@ -11,6 +12,7 @@ import { Footer } from "./components/Footer";
 import { NowPlayingBar } from "./components/NowPlayingBar";
 
 export function NightCity() {
+  useDocumentTitle("NightCity Records · Vinyl", "en");
   useFonts(FONTS_HREF);
   const styles = useNightCityStyles();
 

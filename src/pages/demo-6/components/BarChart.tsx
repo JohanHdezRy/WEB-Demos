@@ -15,20 +15,31 @@ export function BarChart({ data, height = 80, color = S.blue }: BarChartProps) {
   const barW = Math.floor(w / data.length) - 4;
 
   useEffect(() => {
-    barsRef.current.forEach((bar, i) => {
-      if (!bar) return;
-      const finalH = (data[i].value / max) * height;
-      gsap.fromTo(
-        bar,
-        { attr: { height: 0, y: height } },
-        {
-          attr: { height: finalH, y: height - finalH },
-          duration: 0.8,
-          delay: 0.3 + i * 0.07,
-          ease: "power2.out",
-        },
-      );
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      barsRef.current.forEach((bar, i) => {
+        if (!bar) return;
+        const finalH = (data[i].value / max) * height;
+        gsap.set(bar, { attr: { height: finalH, y: height - finalH } });
+      });
     });
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      barsRef.current.forEach((bar, i) => {
+        if (!bar) return;
+        const finalH = (data[i].value / max) * height;
+        gsap.fromTo(
+          bar,
+          { attr: { height: 0, y: height } },
+          {
+            attr: { height: finalH, y: height - finalH },
+            duration: 0.8,
+            delay: 0.3 + i * 0.07,
+            ease: "power2.out",
+          },
+        );
+      });
+    });
+    return () => mm.revert();
   }, [data, max, height]);
 
   return (

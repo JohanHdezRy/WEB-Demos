@@ -9,7 +9,7 @@ const Rinacita = lazy(() =>
   import("./pages/demo-2/Rinacita").then((m) => ({ default: m.Rinacita })),
 );
 const Lupa = lazy(() =>
-  import("./pages/demo-3/lupa").then((m) => ({ default: m.Lupa })),
+  import("./pages/demo-3/Lupa").then((m) => ({ default: m.Lupa })),
 );
 const NightCity = lazy(() =>
   import("./pages/demo-4/NightCity").then((m) => ({ default: m.NightCity })),

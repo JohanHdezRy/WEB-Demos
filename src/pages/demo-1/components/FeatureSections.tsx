@@ -26,7 +26,11 @@ export function FeatureSections() {
             <img
               className="feat-img"
               src={feat.img}
-              alt={feat.title}
+              alt=""
+              width={1200}
+              height={800}
+              loading="lazy"
+              decoding="async"
               style={{
                 width: "100%",
                 height: "110%",

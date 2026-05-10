@@ -32,20 +32,34 @@ export function MetricCard({
       typeof value === "number"
         ? value
         : parseFloat(String(value).replace(/[$,]/g, ""));
-    const obj = { val: 0 };
-    gsap.to(obj, {
-      val: target,
-      duration: 1.5,
-      delay: 0.4,
-      ease: "power2.out",
-      onUpdate: () => {
-        if (valRef.current)
-          valRef.current.textContent =
-            prefix +
-            obj.val.toLocaleString("en-US", { maximumFractionDigits: 0 }) +
-            suffix;
-      },
+    const setFinal = () => {
+      if (valRef.current)
+        valRef.current.textContent =
+          prefix +
+          target.toLocaleString("en-US", { maximumFractionDigits: 0 }) +
+          suffix;
+    };
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: reduce)", () => {
+      setFinal();
     });
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const obj = { val: 0 };
+      gsap.to(obj, {
+        val: target,
+        duration: 1.5,
+        delay: 0.4,
+        ease: "power2.out",
+        onUpdate: () => {
+          if (valRef.current)
+            valRef.current.textContent =
+              prefix +
+              obj.val.toLocaleString("en-US", { maximumFractionDigits: 0 }) +
+              suffix;
+        },
+      });
+    });
+    return () => mm.revert();
   }, [value, prefix, suffix, donut]);
 
   return (
